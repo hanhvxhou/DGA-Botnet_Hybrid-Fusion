@@ -58,8 +58,11 @@ TEST_CSV    = "test.csv"
 CSV_SEP     = ";"
 DOMAIN_COL  = "domain"
 LABEL_COL   = "label"
-OUTPUT_DIR  = Path("out_M1")
-SEED        = 42
+#OUTPUT_DIR  = Path("out_M1")
+#SEED        = 42
+SEED = int(os.environ.get("DGA_SEED", 42))
+OUTPUT_DIR = Path(os.environ.get("DGA_OUTPUT_DIR", f"out_M1_seed{SEED}"))
+
 # Trích đặc trưng
 NGRAM_RANGE = (1, 3)
 MAX_NGRAM_FEATURES = 5000

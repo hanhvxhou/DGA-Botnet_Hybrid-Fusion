@@ -109,8 +109,11 @@ TEST_CSV    = "test.csv"
 CSV_SEP     = ";"
 DOMAIN_COL  = "domain"
 LABEL_COL   = "label"
-OUTPUT_DIR  = Path("out_M6_v3_Markov")
-SEED        = 42
+#OUTPUT_DIR  = Path("out_M6_v3_Markov")
+#SEED        = 42
+SEED = int(os.environ.get("DGA_SEED", 42))
+OUTPUT_DIR = Path(os.environ.get("DGA_OUTPUT_DIR", f"out_M6_v3_Markov_seed{SEED}"))
+
 # Nguồn pretrained models
 SELECT_ROOT      = Path("out_select")
 BILSTM_DIR       = SELECT_ROOT / "bilstm"

@@ -48,8 +48,11 @@ TEST_CSV    = "test.csv"
 CSV_SEP     = ";"
 DOMAIN_COL  = "domain"
 LABEL_COL   = "label"
-OUTPUT_DIR  = Path("out_M5")
-SEED        = 42
+#OUTPUT_DIR  = Path("out_M5")
+#SEED        = 42
+SEED = int(os.environ.get("DGA_SEED", 42))
+OUTPUT_DIR = Path(os.environ.get("DGA_OUTPUT_DIR", f"out_M5_seed{SEED}"))
+
 # Encode ký tự
 CHAR_VOCAB = ['<pad>', '<cls>'] + list("abcdefghijklmnopqrstuvwxyz0123456789-.")
 CHAR_TO_ID = {c: i for i, c in enumerate(CHAR_VOCAB)}

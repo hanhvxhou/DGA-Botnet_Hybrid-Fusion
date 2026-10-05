@@ -1,324 +1,132 @@
-# DGA-Botnet Hybrid Fusion (DGA-HLF)
+# Multi-seed tools cho IJICS revision
 
-Detecting Domain Generation Algorithm (DGA) botnet domains using a **Hybrid Late Fusion** architecture that combines **BiLSTM** (String-Level), **DistilBERT** (Semantic-Level), and **XGBoost** over 20 handcrafted features (Statistical-Level) through **soft voting** with internally normalized weights.
+Bộ công cụ chạy multi-seed experiments + aggregation để trả lời Reviewer 1, 2.
 
-The proposed **M6** model achieves F1 = **97.73%**, AUC = **0.9967**, and DGA-W F1 = **93.02%** on the in-distribution test set (UTL_DGA22 + Tranco Top 1M, 45,600 samples), surpassing standalone BERT (97.45%, 109M parameters). External evaluation on **124 DGA families** from UMUDGA, Netlab360, and DGArchive (272,605 samples) yields DR = **94.62%**, with **90.40% on 63 out-of-distribution families**.
+## Thứ tự dùng
 
----
+### Bước 1 — Patch M1-M6 (5 phút)
 
-## Table of Contents
+Mở từng file sau trong PyCharm, tìm 2 dòng:
 
-- [Contributions](#contributions)
-- [M6 Architecture](#m6-architecture)
-- [Repository Structure](#repository-structure)
-- [Environment Requirements](#environment-requirements)
-- [Installation](#installation)
-- [Datasets](#datasets)
-- [Running the Experiments](#running-the-experiments)
-- [Results](#results)
-- [Reproducibility](#reproducibility)
-- [License](#license)
-- [Contact](#contact)
-
----
-
-## Contributions
-
-1. **Information Representation Framework** — a four-category taxonomy (String / Semantic / Context / Hybrid) that classifies DGA detection methods by the source of information they exploit, rather than by the underlying architecture (ML / DL / Transformer / GNN).
-2. **M6 Hybrid Late Fusion** — three independent classification branches (BiLSTM, DistilBERT, XGBoost) integrated through soft voting with optimized weights; surpasses every single-branch model including standalone BERT.
-3. **Controlled Experimental Evaluation** — DataNew with 304,000 samples pre-split 70:15:15 + three external datasets covering 124 DGA families; within/out-of-distribution analysis.
-
-## M6 Architecture
-
-```
-Domain input
-     │
-     ├─────────────┬──────────────────┬───────────────────┐
-     ▼             ▼                  ▼
-┌──────────┐  ┌──────────────┐  ┌──────────────────┐
-│ Branch 1 │  │   Branch 2   │  │     Branch 3     │
-│  String  │  │   Semantic   │  │    Statistical   │
-├──────────┤  ├──────────────┤  ├──────────────────┤
-│ Char emb │  │ WordPiece    │  │ 20 features      │
-│ BiLSTM   │  │ DistilBERT   │  │ (17 + 1 + 2)     │
-│ MLP head │  │ Classifier   │  │ XGBoost          │
-└────┬─────┘  └──────┬───────┘  └─────────┬────────┘
-     │               │                    │
-     ▼               ▼                    ▼
-  P_string       P_semantic           P_handcraft
-     │               │                    │
-     └───────────────┼────────────────────┘
-                     ▼
-            Soft voting (w1, w2, w3)
-         Internally normalized before fusion
-                     ▼
-              Final: DGA / Benign
+```python
+SEED        = 42
+OUTPUT_DIR  = Path("out_M<n>")
 ```
 
-See Section 4 of the paper for the fusion equation and weight optimization details.
+Thay bằng:
 
-## Repository Structure
-
-```
-DGA-HLF/
-├── M1.py                       # Baseline M1 — Random Forest + n-gram + TF-IDF/LSA
-├── M2.py                       # Baseline M2 — TF-IDF + Deep MLP
-├── M3.py                       # Baseline M3 — RCNN-SPP (BiLSTM + CNN + SPP)
-├── M4.py                       # Baseline M4 — ATT-CNN-BiLSTM
-├── M5.py                       # Baseline M5 — Dual-Embedding Transformer
-│
-├── selectAlgorithm.py          # Embedding selection (CNN / BiLSTM / BERT / DistilBERT / SecureBERT)
-│
-├── M6_v3.py                    # M6 Hybrid Late Fusion
-├── M6_v3_Markov.py             # M6 with Markov chain perplexity features
-├── M6_v3_Markov_w2min.py       # M6 with minimum-weight constraint
-│
-├── Test_M6_v3_Markov.py        # Ablation: Markov perplexity features
-├── Test_M6_v3_Jaccard.py       # Ablation: Jaccard similarity (compared with Markov)
-│
-├── splitDataUTL.py             # Pre-split DataNew 70:15:15 after deduplication
-├── systemInfo.py               # Collect hardware information
-│
-├── linkDataset.txt             # Quick dataset links (see DATASET.md for details)
-├── DATASET.md                  # Detailed dataset download instructions
-├── REPRODUCIBILITY.md          # Step-by-step reproduction guide
-├── requirements.txt            # Python dependencies
-├── LICENSE                     # MIT License
-├── README.md                   # This file
-│
-└── results/                    # Reference outputs for reviewer comparison
-    ├── README.md
-    ├── baselines/              # M1-M5 outputs
-    ├── select_algorithm/       # Embedding comparison results
-    ├── m6_markov/              # M6 Hybrid Late Fusion outputs
-    └── external_eval/          # UMUDGA + Netlab360 + DGArchive detection rates
+```python
+SEED        = int(os.environ.get("DGA_SEED", 42))
+OUTPUT_DIR  = Path(os.environ.get("DGA_OUTPUT_DIR", f"out_M<n>_seed{SEED}"))
 ```
 
-The following directories are NOT committed (via `.gitignore`):
+Files cần patch:
+- M1.py (OUTPUT_DIR = `Path("out_M1")`)
+- M2.py (OUTPUT_DIR = `Path("out_M2")`)
+- M3.py (OUTPUT_DIR = `Path("out_M3")`)
+- M4.py (OUTPUT_DIR = `Path("out_M4")`)
+- M5.py (OUTPUT_DIR = `Path("out_M5")`)
+- M6_v3_Markov.py (OUTPUT_DIR = `Path("out_M6_v3_Markov")`)
 
-```
-DataNew/                        # train.csv / val.csv / test.csv after pre-split
-ngrams/                         # Markov bigram/trigram counts from benign training set
-out_M1/ ... out_M5/             # Baseline outputs (full version with model weights)
-out_select/                     # selectAlgorithm outputs (candidate comparison)
-out_M6_v3/                      # M6 Early Fusion output (baseline)
-out_M6_v3_Markov/               # Main M6 output (Markov perplexity)
-out_M6_v3_Markov_w2min/         # M6 output with w_min constraint
-test_external/                  # Evaluation results on UMUDGA / Netlab360 / DGArchive
-```
+Chi tiết trong `PATCH_INSTRUCTIONS.md`.
 
-## Environment Requirements
+### Bước 2 — Verify patch work (2 phút)
 
-### Hardware (recommended)
-
-- CPU: Intel Core, 24 threads
-- RAM: 64 GB
-- GPU: NVIDIA RTX 5070 Ti 16 GB VRAM (or equivalent, minimum 12 GB VRAM for DistilBERT/BERT)
-- Storage: ~30 GB for datasets and checkpoints
-
-### Software
-
-- OS: Windows 10 / Ubuntu 22.04+
-- Python 3.10.9
-- CUDA 12.8
-- PyTorch 2.9.0+cu128
-
-## Installation
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/hanhvxhou/DGA-Botnet_Hybrid-Fusion.git
-cd DGA-Botnet_Hybrid-Fusion
-
-# 2. Create a virtual environment
-python -m venv venv
-# Linux/Mac
-source venv/bin/activate
-# Windows
-venv\Scripts\activate
-
-# 3. Install PyTorch with CUDA 12.8 first (for GPU users)
-pip install torch==2.9.0+cu128 torchvision==0.24.0+cu128 torchaudio==2.9.0+cu128 --index-url https://download.pytorch.org/whl/cu128
-
-# 4. Install the remaining dependencies
-pip install -r requirements.txt
-
-# 5. Download the NLTK corpus (for the meaning_ratio feature)
-python -c "import nltk; nltk.download('words')"
+```powershell
+$env:DGA_SEED = 42
+python M1.py
+# Kết quả nên vào folder: out_M1_seed42/
+# Và F1 ≈ 93.24% (giống kết quả cũ)
 ```
 
-CPU-only users can skip step 3; step 4 will install the CPU wheel automatically.
+### Bước 3 — Chạy multi-seed (chạy qua đêm, ~5-10 giờ)
 
-## Datasets
-
-Datasets are NOT committed to this repository (large size, third-party licenses). See [DATASET.md](DATASET.md) for detailed download instructions, directory structure, and troubleshooting.
-
-| Dataset | Role | Families | Samples |
-|---------|------|----------|---------|
-| UTL_DGA22 | DGA training | 76 | 152,000 |
-| Tranco Top 1M | Benign training | — | 152,000 |
-| UMUDGA | External evaluation | 50 | 100,000 |
-| Netlab360 | External evaluation | 43 | 50,013 |
-| DGArchive | External evaluation | 79 | 122,592 |
-
-### Preparing DataNew
-
-After downloading UTL_DGA22 and Tranco Top 1M, run:
-
-```bash
-python splitDataUTL.py
+```powershell
+cd D:\job\pycharm\DGABotnet2k25\DGA-HLF
+Copy-Item path\to\run_multiseed.ps1 .\
+.\run_multiseed.ps1
 ```
 
-This produces three files: `DataNew/train.csv` (212,800 samples), `DataNew/val.csv` (45,600), and `DataNew/test.csv` (45,600) — a 70:15:15 ratio after deduplication.
+Script sẽ:
+- Loop qua seeds 42-46
+- Mỗi seed xoá cache Markov cũ rồi chạy M1 → M2 → M3 → M4 → M5 → M6_v3_Markov
+- Output: `out_<MODEL>_seed<N>/`
+- Log file: `multiseed_log_<timestamp>.txt`
+- Skip nếu seed đã có `summary.txt` (resume-friendly)
 
-## Running the Experiments
+### Bước 4 — Aggregate kết quả (2 phút)
 
-### Collect system information
-
-```bash
-python systemInfo.py
+```powershell
+Copy-Item path\to\aggregate_seeds.py .\
+python aggregate_seeds.py
 ```
 
-### Baselines M1–M5
+Output: folder `aggregate_results/` chứa:
+- `table_binary_mean_std.csv` — Table 1 revised
+- `table_per_family_mean_std.csv` — Table 2 revised
+- `paired_ci_m6_vs_others.txt` — Bootstrap CI cho F1 differences
+- `aggregated_summary.md` — Paste vào response letter
 
-```bash
-python M1.py       # Random Forest + n-gram + LSA (~20 s)
-python M2.py       # TF-IDF + Deep MLP (~2 min)
-python M3.py       # RCNN-SPP (~2 min)
-python M4.py       # ATT-CNN-BiLSTM (~2 min)
-python M5.py       # Dual-Embedding Transformer (~30 min)
+### Bước 5 — Disagreement analysis (1 phút)
+
+```powershell
+Copy-Item path\to\disagreement_analysis.py .\
+python disagreement_analysis.py
 ```
 
-Outputs are written to `out_M1/`, `out_M2/`, ..., `out_M5/`.
+Output: 
+- `aggregate_results/disagreement_matrix.csv`
+- `aggregate_results/disagreement_by_subtype.csv`
+- `aggregate_results/disagreement_summary.md`
 
-### Embedding selection (selectAlgorithm)
+### Bước 6 — Upload kết quả cho tôi
 
-```bash
-python selectAlgorithm.py
+Zip folder `aggregate_results/` và upload. Tôi sẽ:
+- Merge số liệu vào bảng Table 1-5 revised
+- Tracked-changes bài IJICS
+- Hoàn thiện response letter
+
+## File list
+
+| File | Purpose |
+|------|---------|
+| `PATCH_INSTRUCTIONS.md` | Chi tiết cách patch M1-M6 |
+| `run_multiseed.ps1` | PowerShell script chạy 5 seeds |
+| `aggregate_seeds.py` | Gộp kết quả → mean/std + bootstrap CI |
+| `disagreement_analysis.py` | Phân tích BiLSTM vs DistilBERT fusion |
+| `README.md` | File này |
+
+## Troubleshooting
+
+### Markov cache issues
+
+Nếu M6_v3_Markov cho F1 lạ ở seed 43-46:
+- Check `benign_markov.npz` có bị xóa giữa các seeds không
+- Script đã có `Remove-Item benign_markov.npz` trước mỗi seed, nhưng verify
+
+### OOM (Out of Memory) ở M5
+
+M5 là model nặng nhất. Nếu OOM:
+- Giảm batch_size trong M5.py từ 256 → 128
+- Hoặc skip M5 với 1 số seeds (báo trong response: "M5 completed 3 seeds due to GPU constraints")
+
+### selectAlgorithm có cần retrain không?
+
+**KHÔNG**. selectAlgorithm chỉ dùng để chọn embedding backbone (DistilBERT), không claim statistical significance. Giữ nguyên kết quả seed 42 cũ.
+
+## Expected output example (sau aggregate)
+
+```
+table_binary_mean_std.csv:
+
+Model                        n_seeds  Acc (%)         Pre (%)         Rec (%)         F1 (%)          AUC-ROC
+M1 (RF + n-gram + PCA)       5        93.4X ± 0.XX    96.1X ± 0.XX    90.5X ± 0.XX    93.2X ± 0.XX    0.981X ± 0.0XXX
+M2 (TF-IDF + MLP)            5        95.9X ± 0.XX    ...
+M3 (RCNN-SPP)                5        96.5X ± 0.XX    ...
+M4 (ATT-CNN-BiLSTM)          5        96.1X ± 0.XX    ...
+M5 (Dual Transformer)        5        95.6X ± 0.XX    ...
+M6 Hybrid Late Fusion        5        97.7X ± 0.XX    98.0X ± 0.XX    97.4X ± 0.XX    97.7X ± 0.XX    0.9967 ± 0.00XX
 ```
 
-Compares five candidates: character CNN, character BiLSTM, DistilBERT, BERT, SecureBERT. Output in `out_select/`.
-
-### M6 Hybrid Late Fusion
-
-```bash
-# Main M6 with Markov perplexity (default configuration)
-python M6_v3_Markov.py
-
-# Variant with minimum-weight constraint (w_min >= 0.05)
-python M6_v3_Markov_w2min.py
-
-# Original version (without Markov)
-python M6_v3.py
-```
-
-### Ablation: Markov vs. Jaccard
-
-```bash
-python Test_M6_v3_Markov.py       # Standalone handcraft branch with Markov features
-python Test_M6_v3_Jaccard.py      # Standalone handcraft branch with Jaccard similarity
-```
-
-### Full pipeline (from scratch)
-
-```bash
-python splitDataUTL.py              # Step 1: prepare DataNew
-python M1.py && python M2.py && python M3.py && python M4.py && python M5.py   # Step 2: baselines
-python selectAlgorithm.py           # Step 3: embedding selection
-python M6_v3_Markov.py              # Step 4: train and evaluate M6
-```
-
-Total runtime: ~5-6 hours on an RTX 5070 Ti.
-
-## Results
-
-### Baselines M1-M5 (in-distribution test set, 45,600 samples)
-
-| Model | F1 (%) | DGA-C | DGA-P | DGA-W | Infer (ms) | Size (MB) |
-|-------|--------|-------|-------|-------|------------|-----------|
-| M1 — RF + n-gram | 93.24 | 95.01 | 86.34 | 81.14 | 0.002 | 67.56 |
-| M2 — TF-IDF + MLP | 95.99 | 95.20 | 90.65 | 87.61 | 0.007 | 20.25 |
-| **M3 — RCNN-SPP** | **96.49** | 95.94 | 91.87 | 89.19 | 0.011 | 5.54 |
-| M4 — ATT-CNN-BiLSTM | 96.14 | 95.86 | 91.35 | 87.85 | 0.007 | 1.60 |
-| M5 — Dual Transformer | 95.65 | 95.08 | 90.12 | 86.11 | 0.092 | 38.28 |
-
-### Embedding selection
-
-| Candidate | F1 (%) | DGA-W | Train (s) | Infer (ms) | Size (MB) |
-|-----------|--------|-------|-----------|------------|-----------|
-| CNN (char) | 95.31 | 85.09 | 76.2 | 0.003 | 1.40 |
-| BiLSTM (char) | 96.45 | 88.84 | 151.6 | 0.010 | 2.79 |
-| DistilBERT | 97.33 | 91.45 | 2,183.7 | 0.349 | 253.19 |
-| BERT | **97.45** | 92.31 | 4,154.3 | 0.642 | 417.71 |
-| SecureBERT | 97.28 | 92.07 | 4,167.3 | 0.628 | 475.56 |
-
-**DistilBERT** is selected for M6 (Green AI tradeoff).
-
-### M6 Hybrid Late Fusion
-
-| Model | F1 (%) | DGA-C | DGA-P | DGA-W | Infer (ms) | Size (MB) |
-|-------|--------|-------|-------|-------|------------|-----------|
-| M3-RCNN-SPP | 96.49 | 95.94 | 91.87 | 89.19 | 0.011 | 5.54 |
-| DistilBERT | 97.33 | 96.74 | 93.69 | 91.45 | 0.349 | 253.19 |
-| BERT | 97.45 | 97.03 | 94.22 | 92.31 | 0.642 | 417.71 |
-| **M6 Hybrid** | **97.73** | **97.47** | **94.99** | **93.02** | ~1.001 | 256.32 |
-
-### External evaluation (3 datasets, 124 families, 272,605 samples)
-
-| Dataset | Families | Samples | DR (%) | Families in UTL_DGA22 |
-|---------|----------|---------|--------|------------------------|
-| UMUDGA | 50 | 100,000 | 97.26 | 46/50 |
-| Netlab360 | 43 | 50,013 | 93.98 | 24/43 |
-| DGArchive | 79 | 122,592 | 92.72 | 31/79 |
-| **Combined** | **124** | **272,605** | **94.62** | **61/124** |
-| Within-distribution | 61 | 183,746 | 96.65 | — |
-| Out-of-distribution | 63 | 88,859 | 90.40 | — |
-
-The gap of only **6.25 pp** between within- and out-of-distribution families demonstrates the generalization capability of Hybrid Late Fusion.
-
-## Reproducibility
-
-Reference outputs for reviewers are provided in the `results/` folder. See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for a complete step-by-step guide including:
-
-- Environment setup and verification
-- Dataset preparation
-- Full pipeline execution
-- Expected metrics with tolerance ranges
-- Troubleshooting common issues
-- Hardware variation notes
-
-Reviewers can compare their reproduction against the files under `results/`:
-- `results/baselines/M1/` through `results/baselines/M5/` — baseline outputs
-- `results/select_algorithm/` — embedding comparison
-- `results/m6_markov/` — M6 Hybrid Late Fusion
-- `results/external_eval/` — external evaluation
-
-Minor differences within +/- 0.3 percentage points on F1 are expected due to non-deterministic CUDA operations and hardware variations.
-
-## License
-
-Source code is released under the **MIT License** — see the `LICENSE` file.
-
-Datasets are used under their respective original licenses:
-- UTL_DGA22 — Tuan et al. 2023
-- Tranco Top 1M — tranco-list.eu (research use)
-- UMUDGA — University of Murcia (CC-BY 4.0)
-- Netlab360 — Qihoo 360 (open)
-- DGArchive — Fraunhofer FKIE (academic access)
-
-## Contact
-
-**Dr. Vu Xuan Hanh**
-Faculty of Information Technology, Hanoi Open University
-Email: hanhvx@hou.edu.vn
-GitHub: [@hanhvxhou](https://github.com/hanhvxhou)
-
-**Dr. Xuan Dau Hoang**
-Email: dauhx@ptit.edu.vn
-Posts and Telecommunications Institute of Technology (PTIT), Vietnam
-
-**Ninh Thi Thu Trang**
-Email: trangntt2@ptit.edu.vn
-Posts and Telecommunications Institute of Technology (PTIT), Vietnam
-
-For code-related issues, please open an [issue](https://github.com/hanhvxhou/DGA-Botnet_Hybrid-Fusion/issues) on this repository.
+Variance (± 0.XX) sẽ là small nếu training stable. Nếu variance lớn (> 1pp) 
+có thể signal overfitting hoặc data leakage — cần investigate.
