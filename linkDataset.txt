@@ -1,0 +1,5 @@
+UTL_DGA: https://github.com/tongtuan92/UTL_DGA22-Dataset
+UMUDGA: https://data.mendeley.com/datasets/y8ph45msv8/1
+Netlab360:https://github.com/360netlab/dga     http://data.netlab.360.com/dga/      https://github.com/chrmor/DGA_domains_dataset
+Tonghop: https://github.com/hmaccelerate/DGA_Detection/tree/master
+benign: https://tranco-list.eu/list/QW4P4/1000000

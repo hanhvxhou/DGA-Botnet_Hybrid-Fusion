@@ -1,0 +1,374 @@
+# ============================================================
+# DGA Botnet Detection Project - .gitignore
+# ============================================================
+
+# ------------------------------------------------------------
+# Python
+# ------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+.Python
+develop-eggs/
+downloads/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+MANIFEST
+
+# ------------------------------------------------------------
+# Virtual environments
+# ------------------------------------------------------------
+venv/
+env/
+ENV/
+.venv/
+.env/
+virtualenv/
+pyvenv.cfg
+
+# ------------------------------------------------------------
+# IDE / Editor
+# ------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+.spyderproject
+.spyproject
+.ropeproject
+*.sublime-project
+*.sublime-workspace
+
+# ------------------------------------------------------------
+# Jupyter Notebook
+# ------------------------------------------------------------
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+*.nbconvert.ipynb
+profile_default/
+ipython_config.py
+
+# ------------------------------------------------------------
+# Testing & Coverage
+# ------------------------------------------------------------
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.cache/
+nosetests.xml
+
+# ------------------------------------------------------------
+# Documentation builds
+# ------------------------------------------------------------
+docs/_build/
+docs/build/
+site/
+.mkdocs/
+
+# ------------------------------------------------------------
+# Dataset files (dung lượng lớn, không commit)
+# ------------------------------------------------------------
+data/raw/
+data/DataNew/
+data/external/
+data/processed/
+data/interim/
+data/*.csv
+data/*.tsv
+data/*.parquet
+data/*.feather
+data/*.h5
+data/*.hdf5
+data/*.arrow
+data/*.pkl
+data/*.pickle
+data/*.npz
+data/*.npy
+!data/.gitkeep
+!data/README.md
+
+# Alexa Top 1M
+*top-1m*.csv
+alexa_top_1m*
+
+# DGA family files
+UTL_DGA22/
+UMUDGA/
+Netlab360/
+DGArchive/
+*_dga_feed/
+
+# ------------------------------------------------------------
+# Model checkpoints & weights (dung lượng lớn)
+# ------------------------------------------------------------
+checkpoints/
+models/
+weights/
+pretrained/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.h5
+*.keras
+*.onnx
+*.pb
+*.tflite
+
+# Transformer model folders
+distilbert_finetuned/
+bert_finetuned/
+securebert_finetuned/
+*/pytorch_model.bin
+*/model.safetensors
+
+# XGBoost / sklearn models
+*.xgb
+*.joblib
+*.sav
+
+# ------------------------------------------------------------
+# Experiment outputs
+# ------------------------------------------------------------
+experiments/logs/
+experiments/results/
+experiments/outputs/
+experiments/tensorboard/
+experiments/wandb/
+experiments/mlruns/
+logs/
+runs/
+tb_logs/
+lightning_logs/
+
+# Specific result files
+weight_search.csv
+summary_*.txt
+winner.txt
+per_family_summary*.txt
+*_predictions.csv
+*_probs.npz
+
+# ------------------------------------------------------------
+# ML frameworks & tracking
+# ------------------------------------------------------------
+# TensorBoard
+events.out.tfevents.*
+
+# Weights & Biases
+wandb/
+.wandb/
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# DVC (Data Version Control)
+.dvc/
+.dvcignore
+
+# CodeCarbon
+emissions.csv
+.codecarbon.config
+
+# ------------------------------------------------------------
+# Hugging Face cache
+# ------------------------------------------------------------
+.cache/
+huggingface/
+transformers_cache/
+~/.cache/huggingface/
+
+# ------------------------------------------------------------
+# Secrets & credentials (KHÔNG BAO GIỜ COMMIT)
+# ------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+*.env
+secrets.yaml
+secrets.json
+credentials.json
+*api_key*
+*token*
+*.pem
+*.key
+*.crt
+config/local.yaml
+config/private.yaml
+
+# ------------------------------------------------------------
+# Logs & temporary files
+# ------------------------------------------------------------
+*.log
+logs/
+tmp/
+temp/
+cache/
+.cache/
+*.tmp
+*.bak
+*.backup
+*.old
+
+# ------------------------------------------------------------
+# OS-specific
+# ------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+.directory
+.Trash-*
+.nfs*
+
+# ------------------------------------------------------------
+# Latex (bản thảo bài báo)
+# ------------------------------------------------------------
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.out
+*.nav
+*.snm
+*.vrb
+*.dvi
+docs/paper/*.pdf
+!docs/paper/final.pdf
+
+# ------------------------------------------------------------
+# Office / documents (giữ bản chính, bỏ bản tạm)
+# ------------------------------------------------------------
+~$*.docx
+~$*.xlsx
+~$*.pptx
+*.docx#
+*.tmp.docx
+
+# ------------------------------------------------------------
+# Node (nếu có frontend dashboard)
+# ------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ------------------------------------------------------------
+# Project-specific
+# ------------------------------------------------------------
+# File quá lớn
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# Hình ảnh tạm
+*.png.tmp
+*_backup.png
+figures/draft_*
+
+# Scratch & experimental
+scratch/
+sandbox/
+playground/
+TODO.md
+NOTES.md
+notes_*.md
+
+# Nhật ký cá nhân
+diary/
+journal/
+
+# ------------------------------------------------------------
+# Giữ cấu trúc thư mục trống
+# ------------------------------------------------------------
+# Experiment outputs
+out_M1/
+out_M2/
+out_M3/
+out_M4/
+out_M5/
+out_M6_v3/
+out_M6_v3_Markov/
+out_M6_v3_Markov_w2min/
+out_select/
+
+# Dataset lớn
+DataNew/
+ngrams/
+test_external/
+train.csv
+tongHop.xlsx
+*.csv
+*.xlsx
+
+# System / temp
+system_info.txt
+temp.py
+
+# File cá nhân — xem xét
+nameFile.py
+TongAnhTuan.py
+
+# PyCharm
+.idea/
+
+!**/.gitkeep
