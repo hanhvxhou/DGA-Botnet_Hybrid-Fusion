@@ -2,7 +2,7 @@
 
 Detecting Domain Generation Algorithm (DGA) botnet domains using a **Hybrid Late Fusion** architecture that combines **BiLSTM** (String-Level), **DistilBERT** (Semantic-Level), and **XGBoost** over 20 handcrafted features (Statistical-Level) through **soft voting** with internally normalized weights.
 
-The proposed **M6** model achieves F1 = **97.73%**, AUC = **0.9967**, and DGA-W F1 = **93.02%** on the in-distribution test set (UTL_DGA22 + Alexa Top 1M, 45,600 samples), surpassing standalone BERT (97.45%, 109M parameters). External evaluation on **124 DGA families** from UMUDGA, Netlab360, and DGArchive (272,605 samples) yields DR = **94.62%**, with **90.40% on 63 out-of-distribution families**.
+The proposed **M6** model achieves F1 = **97.73%**, AUC = **0.9967**, and DGA-W F1 = **93.02%** on the in-distribution test set (UTL_DGA22 + Tranco Top 1M, 45,600 samples), surpassing standalone BERT (97.45%, 109M parameters). External evaluation on **124 DGA families** from UMUDGA, Netlab360, and DGArchive (272,605 samples) yields DR = **94.62%**, with **90.40% on 63 out-of-distribution families**.
 
 ---
 
@@ -16,6 +16,7 @@ The proposed **M6** model achieves F1 = **97.73%**, AUC = **0.9967**, and DGA-W 
 - [Datasets](#datasets)
 - [Running the Experiments](#running-the-experiments)
 - [Results](#results)
+- [Reproducibility](#reproducibility)
 - [License](#license)
 - [Contact](#contact)
 
@@ -78,10 +79,19 @@ DGA-HLF/
 ├── splitDataUTL.py             # Pre-split DataNew 70:15:15 after deduplication
 ├── systemInfo.py               # Collect hardware information
 │
-├── linkDataset.txt             # Links to UTL_DGA22, Alexa, UMUDGA, Netlab360, DGArchive
+├── linkDataset.txt             # Quick dataset links (see DATASET.md for details)
+├── DATASET.md                  # Detailed dataset download instructions
+├── REPRODUCIBILITY.md          # Step-by-step reproduction guide
 ├── requirements.txt            # Python dependencies
 ├── LICENSE                     # MIT License
-└── README.md
+├── README.md                   # This file
+│
+└── results/                    # Reference outputs for reviewer comparison
+    ├── README.md
+    ├── baselines/              # M1-M5 outputs
+    ├── select_algorithm/       # Embedding comparison results
+    ├── m6_markov/              # M6 Hybrid Late Fusion outputs
+    └── external_eval/          # UMUDGA + Netlab360 + DGArchive detection rates
 ```
 
 The following directories are NOT committed (via `.gitignore`):
@@ -89,7 +99,7 @@ The following directories are NOT committed (via `.gitignore`):
 ```
 DataNew/                        # train.csv / val.csv / test.csv after pre-split
 ngrams/                         # Markov bigram/trigram counts from benign training set
-out_M1/ ... out_M5/             # Baseline outputs
+out_M1/ ... out_M5/             # Baseline outputs (full version with model weights)
 out_select/                     # selectAlgorithm outputs (candidate comparison)
 out_M6_v3/                      # M6 Early Fusion output (baseline)
 out_M6_v3_Markov/               # Main M6 output (Markov perplexity)
@@ -141,19 +151,19 @@ CPU-only users can skip step 3; step 4 will install the CPU wheel automatically.
 
 ## Datasets
 
-Datasets are NOT committed to this repository (large size, third-party licenses). See `linkDataset.txt` for download sources.
+Datasets are NOT committed to this repository (large size, third-party licenses). See [DATASET.md](DATASET.md) for detailed download instructions, directory structure, and troubleshooting.
 
-| Dataset | Families | Samples | Purpose |
-|---------|----------|---------|---------|
-| UTL_DGA22 | 76 | 152,000 | DGA training |
-| Alexa Top 1M | — | 152,000 | Benign training |
-| UMUDGA | 50 | 100,000 | External evaluation |
-| Netlab360 | 43 | 50,013 | External evaluation |
-| DGArchive | 79 | 122,592 | External evaluation |
+| Dataset | Role | Families | Samples |
+|---------|------|----------|---------|
+| UTL_DGA22 | DGA training | 76 | 152,000 |
+| Tranco Top 1M | Benign training | — | 152,000 |
+| UMUDGA | External evaluation | 50 | 100,000 |
+| Netlab360 | External evaluation | 43 | 50,013 |
+| DGArchive | External evaluation | 79 | 122,592 |
 
 ### Preparing DataNew
 
-After downloading UTL_DGA22 and Alexa Top 1M, run:
+After downloading UTL_DGA22 and Tranco Top 1M, run:
 
 ```bash
 python splitDataUTL.py
@@ -218,7 +228,7 @@ python selectAlgorithm.py           # Step 3: embedding selection
 python M6_v3_Markov.py              # Step 4: train and evaluate M6
 ```
 
-Total runtime: ~2-3 hours on an RTX 5070 Ti.
+Total runtime: ~5-6 hours on an RTX 5070 Ti.
 
 ## Results
 
@@ -266,16 +276,35 @@ Total runtime: ~2-3 hours on an RTX 5070 Ti.
 
 The gap of only **6.25 pp** between within- and out-of-distribution families demonstrates the generalization capability of Hybrid Late Fusion.
 
+## Reproducibility
+
+Reference outputs for reviewers are provided in the `results/` folder. See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for a complete step-by-step guide including:
+
+- Environment setup and verification
+- Dataset preparation
+- Full pipeline execution
+- Expected metrics with tolerance ranges
+- Troubleshooting common issues
+- Hardware variation notes
+
+Reviewers can compare their reproduction against the files under `results/`:
+- `results/baselines/M1/` through `results/baselines/M5/` — baseline outputs
+- `results/select_algorithm/` — embedding comparison
+- `results/m6_markov/` — M6 Hybrid Late Fusion
+- `results/external_eval/` — external evaluation
+
+Minor differences within +/- 0.3 percentage points on F1 are expected due to non-deterministic CUDA operations and hardware variations.
+
 ## License
 
 Source code is released under the **MIT License** — see the `LICENSE` file.
 
 Datasets are used under their respective original licenses:
 - UTL_DGA22 — Tuan et al. 2023
-- Alexa Top 1M — Amazon
-- UMUDGA — University of Murcia
-- Netlab360 — Qihoo 360
-- DGArchive — Fraunhofer FKIE
+- Tranco Top 1M — tranco-list.eu (research use)
+- UMUDGA — University of Murcia (CC-BY 4.0)
+- Netlab360 — Qihoo 360 (open)
+- DGArchive — Fraunhofer FKIE (academic access)
 
 ## Contact
 
