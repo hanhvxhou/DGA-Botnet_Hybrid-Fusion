@@ -16,7 +16,6 @@ The proposed **M6** model achieves F1 = **97.73%**, AUC = **0.9967**, and DGA-W 
 - [Datasets](#datasets)
 - [Running the Experiments](#running-the-experiments)
 - [Results](#results)
-- [Citation](#citation)
 - [License](#license)
 - [Contact](#contact)
 
@@ -266,22 +265,6 @@ Total runtime: ~2-3 hours on an RTX 5070 Ti.
 | Out-of-distribution | 63 | 88,859 | 90.40 | — |
 
 The gap of only **6.25 pp** between within- and out-of-distribution families demonstrates the generalization capability of Hybrid Late Fusion.
-
-## Citation
-
-If you use this code or results in your work, please cite:
-
-```bibtex
-@article{vu2026dga,
-  title   = {DGA Botnet Detection using Hybrid Late Fusion:
-             Combining BiLSTM, DistilBERT and XGBoost-based models
-             through Soft Voting},
-  author  = {Vu, Xuan Hanh and Tran, Tien Dung},
-  journal = {International Journal of Information and Computer Security},
-  year    = {2026},
-  note    = {Submitted}
-}
-```
 
 ## License
 
