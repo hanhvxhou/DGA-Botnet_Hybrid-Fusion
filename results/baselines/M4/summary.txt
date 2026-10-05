@@ -1,0 +1,48 @@
+================ M4 — ATT-CNN-BiLSTM ================
+Data dir: DataNew/ (train.csv, val.csv, test.csv)
+Tổng mẫu           : 304,000  (DGA=152,000, benign=152,000)
+Chia                : Train=212,800 | Val=45,600 | Test=45,600
+
+[Kiến trúc]
+  Char embedding   : 128-d
+  Conv1D           : kernel=3, channels=128
+  BiLSTM           : 128 đơn vị (2 chiều → 256)
+  Attention        : hidden_dim=256, attn_dim=128
+  FC hidden        : 256
+  Tham số          : 417,794
+  Device           : cuda
+
+[Hiệu năng — Test]
+  Accuracy         : 96.15%
+  Precision        : 96.57%
+  Recall           : 95.70%
+  F1-score         : 96.14%
+  AUC-ROC          : 0.9930
+
+[Chi phí huấn luyện]
+  Wall time        : 99.70 s  (1.66 phút)
+  CPU utilization  : 3.6%
+  Avg power        : 60.0 W
+  Energy           : 5981.76 J  (1.6616 Wh)
+  Đo bằng          : estimated_from_utilization
+  Best epoch       : 14  (val F1=96.32%)
+
+[Chi phí suy diễn / mẫu]
+  Wall             : 0.0065 ms/mẫu
+  Energy           : 0.3912 mJ/mẫu
+  Avg power        : 60.0 W
+  Đo bằng          : estimated_from_utilization
+
+[Kích thước mô hình]
+  File tổng        : 1.60 MB  (417,794 tham số)
+
+[Bảng 5 — F1 theo loại DGA]
+  Loại        n_dga   F1 (%)     Prec   Recall
+  DGA-R      11,792   95.86   93.73   98.09
+  DGA-P       6,489   91.35   88.75   94.11
+  DGA-W       4,519   87.85   84.27   91.75
+
+[Môi trường]
+  Python           : 3.10.9
+  PyTorch          : 2.9.0+cu128
+  CUDA available   : True

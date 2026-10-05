@@ -1,0 +1,74 @@
+{
+  "model": "M4 — ATT-CNN-BiLSTM",
+  "dga_type_distribution": {
+    "DGA-P": 6489,
+    "benign": 22800,
+    "DGA-R": 11792,
+    "DGA-W": 4519
+  },
+  "overall": {
+    "accuracy": 0.9615350877192983,
+    "f1": 0.9613605322289289
+  },
+  "per_family": {
+    "DGA-R": {
+      "n_dga": 11792,
+      "n_benign": 22800,
+      "accuracy": 0.9711204902867715,
+      "precision": 0.9372822299651568,
+      "recall": 0.9809192672998643,
+      "f1": 0.9586044006132681,
+      "confusion_matrix": [
+        [
+          22026,
+          774
+        ],
+        [
+          225,
+          11567
+        ]
+      ]
+    },
+    "DGA-P": {
+      "n_dga": 6489,
+      "n_benign": 22800,
+      "accuracy": 0.9605312574686743,
+      "precision": 0.8875163493678244,
+      "recall": 0.9411311450146401,
+      "f1": 0.9135377711293942,
+      "confusion_matrix": [
+        [
+          22026,
+          774
+        ],
+        [
+          382,
+          6107
+        ]
+      ]
+    },
+    "DGA-W": {
+      "n_dga": 4519,
+      "n_benign": 22800,
+      "accuracy": 0.9580145686152495,
+      "precision": 0.8426829268292683,
+      "recall": 0.9174596149590617,
+      "f1": 0.878482890136667,
+      "confusion_matrix": [
+        [
+          22026,
+          774
+        ],
+        [
+          373,
+          4146
+        ]
+      ]
+    }
+  },
+  "heuristic_thresholds": {
+    "DGA-W": "length >= 12 AND vowel_ratio >= 0.30 AND entropy <= 3.6",
+    "DGA-R": "entropy >= 3.8 OR digit_ratio >= 0.15",
+    "DGA-P": "0.20 <= vowel_ratio <= 0.45 AND entropy < 3.8"
+  }
+}

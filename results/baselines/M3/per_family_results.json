@@ -1,0 +1,74 @@
+{
+  "model": "M3 — RCNN-SPP (CNN+BiLSTM+SPP)",
+  "dga_type_distribution": {
+    "DGA-P": 6489,
+    "benign": 22800,
+    "DGA-R": 11792,
+    "DGA-W": 4519
+  },
+  "overall": {
+    "accuracy": 0.9650219298245614,
+    "f1": 0.9649489067135479
+  },
+  "per_family": {
+    "DGA-R": {
+      "n_dga": 11792,
+      "n_benign": 22800,
+      "accuracy": 0.9716986586493987,
+      "precision": 0.9390887679688135,
+      "recall": 0.9805800542740841,
+      "f1": 0.9593860194980295,
+      "confusion_matrix": [
+        [
+          22050,
+          750
+        ],
+        [
+          229,
+          11563
+        ]
+      ]
+    },
+    "DGA-P": {
+      "n_dga": 6489,
+      "n_benign": 22800,
+      "accuracy": 0.962852948205811,
+      "precision": 0.891320098536444,
+      "recall": 0.9479118508244722,
+      "f1": 0.9187453323375654,
+      "confusion_matrix": [
+        [
+          22050,
+          750
+        ],
+        [
+          338,
+          6151
+        ]
+      ]
+    },
+    "DGA-W": {
+      "n_dga": 4519,
+      "n_benign": 22800,
+      "accuracy": 0.9623705113657162,
+      "precision": 0.8497295131236225,
+      "recall": 0.9384819650365125,
+      "f1": 0.8919032597266036,
+      "confusion_matrix": [
+        [
+          22050,
+          750
+        ],
+        [
+          278,
+          4241
+        ]
+      ]
+    }
+  },
+  "heuristic_thresholds": {
+    "DGA-W": "length >= 12 AND vowel_ratio >= 0.30 AND entropy <= 3.6",
+    "DGA-R": "entropy >= 3.8 OR digit_ratio >= 0.15",
+    "DGA-P": "0.20 <= vowel_ratio <= 0.45 AND entropy < 3.8"
+  }
+}

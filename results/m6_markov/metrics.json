@@ -1,0 +1,407 @@
+{
+  "model": "M6-v3 — Late Fusion (BiLSTM-MLP + DistilBERT + Handcraft-XGB)",
+  "architecture": "Late Fusion (3 branch independent classifiers + soft voting)",
+  "branches": {
+    "string": {
+      "source": "BiLSTM emb (256d) → MLP head 128-64-2",
+      "test_f1": 0.9651890367498017,
+      "weight": 0.1
+    },
+    "semantic": {
+      "source": "DistilBERT [CLS] (768d) → fine-tuned classifier",
+      "test_f1": 0.973334502872681,
+      "weight": 0.1
+    },
+    "handcraft": {
+      "source": "20 features → XGBoost (17 base + meaning_ratio + Markov bi/tri perplexity)",
+      "feature_names": [
+        "len_full",
+        "len_main",
+        "entropy",
+        "vowel_ratio",
+        "consonant_ratio",
+        "digit_ratio",
+        "hex_ratio",
+        "special_ratio",
+        "unique_ratio",
+        "longest_vowel_run",
+        "longest_consonant_run",
+        "longest_digit_run",
+        "dot_count",
+        "tld_len",
+        "has_digit",
+        "tld_common",
+        "n_repeats",
+        "meaning_ratio",
+        "markov_bi_perplexity",
+        "markov_tri_perplexity"
+      ],
+      "feature_groups": {
+        "base_17": [
+          "len_full",
+          "len_main",
+          "entropy",
+          "vowel_ratio",
+          "consonant_ratio",
+          "digit_ratio",
+          "hex_ratio",
+          "special_ratio",
+          "unique_ratio",
+          "longest_vowel_run",
+          "longest_consonant_run",
+          "longest_digit_run",
+          "dot_count",
+          "tld_len",
+          "has_digit",
+          "tld_common",
+          "n_repeats"
+        ],
+        "meaning_ratio": [
+          "meaning_ratio"
+        ],
+        "markov_chain": [
+          "markov_bi_perplexity",
+          "markov_tri_perplexity"
+        ]
+      },
+      "markov_model_size": {
+        "bigram_states": 1305,
+        "trigram_states": 22953,
+        "smoothing": "Laplace add-one",
+        "vocab_size": 40
+      },
+      "test_f1": 0.9135579848980052,
+      "weight": 0.0
+    }
+  },
+  "fusion": {
+    "method": "soft_voting (weighted average of probabilities)",
+    "weights": {
+      "string": 0.1,
+      "semantic": 0.1,
+      "handcraft": 0.0
+    },
+    "weights_normalized": {
+      "string": 0.5,
+      "semantic": 0.5,
+      "handcraft": 0.0
+    },
+    "w_min": 0.0,
+    "threshold": 0.5000000000000002,
+    "val_f1_at_best": 0.9787018701870187
+  },
+  "test": {
+    "accuracy": 0.9774122807017543,
+    "precision": 0.98053152039555,
+    "recall": 0.9741666666666666,
+    "f1": 0.9773387309689343,
+    "auc": 0.9967450542474608,
+    "confusion_matrix": [
+      [
+        22359,
+        441
+      ],
+      [
+        589,
+        22211
+      ]
+    ]
+  },
+  "per_family": {
+    "DGA-R": {
+      "n_dga": 11792,
+      "n_benign": 22800,
+      "accuracy": 0.9825393154486587,
+      "precision": 0.9634631317315658,
+      "recall": 0.9861770691994572,
+      "f1": 0.9746877881149946,
+      "confusion_matrix": [
+        [
+          22359,
+          441
+        ],
+        [
+          163,
+          11629
+        ]
+      ]
+    },
+    "DGA-P": {
+      "n_dga": 6489,
+      "n_benign": 22800,
+      "accuracy": 0.9774318003345966,
+      "precision": 0.9342771982116245,
+      "recall": 0.9660964709508398,
+      "f1": 0.9499204485188272,
+      "confusion_matrix": [
+        [
+          22359,
+          441
+        ],
+        [
+          220,
+          6269
+        ]
+      ]
+    },
+    "DGA-W": {
+      "n_dga": 4519,
+      "n_benign": 22800,
+      "accuracy": 0.9763168490793953,
+      "precision": 0.907236011779554,
+      "recall": 0.9544146935162646,
+      "f1": 0.9302275423271864,
+      "confusion_matrix": [
+        [
+          22359,
+          441
+        ],
+        [
+          206,
+          4313
+        ]
+      ]
+    }
+  },
+  "branch_test_metrics": {
+    "string": {
+      "f1": 0.9651890367498017,
+      "accuracy": 0.9653508771929824,
+      "auc": 0.9937979512927054,
+      "per_family": {
+        "DGA-R": {
+          "n_dga": 11792,
+          "n_benign": 22800,
+          "accuracy": 0.9736355226641998,
+          "precision": 0.9441541476159373,
+          "recall": 0.9806648575305291,
+          "f1": 0.9620632279534109,
+          "confusion_matrix": [
+            [
+              22116,
+              684
+            ],
+            [
+              228,
+              11564
+            ]
+          ]
+        },
+        "DGA-P": {
+          "n_dga": 6489,
+          "n_benign": 22800,
+          "accuracy": 0.9654136365188296,
+          "precision": 0.9000584453535944,
+          "recall": 0.9492988133764833,
+          "f1": 0.9240231005775145,
+          "confusion_matrix": [
+            [
+              22116,
+              684
+            ],
+            [
+              329,
+              6160
+            ]
+          ]
+        },
+        "DGA-W": {
+          "n_dga": 4519,
+          "n_benign": 22800,
+          "accuracy": 0.9625535341703576,
+          "precision": 0.859375,
+          "recall": 0.9249834034078336,
+          "f1": 0.8909730363423212,
+          "confusion_matrix": [
+            [
+              22116,
+              684
+            ],
+            [
+              339,
+              4180
+            ]
+          ]
+        }
+      }
+    },
+    "semantic": {
+      "f1": 0.973334502872681,
+      "accuracy": 0.9733333333333334,
+      "auc": 0.9955250952216067,
+      "per_family": {
+        "DGA-R": {
+          "n_dga": 11792,
+          "n_benign": 22800,
+          "accuracy": 0.9773647086031453,
+          "precision": 0.9501921975954855,
+          "recall": 0.9852442333785617,
+          "f1": 0.967400807693909,
+          "confusion_matrix": [
+            [
+              22191,
+              609
+            ],
+            [
+              174,
+              11618
+            ]
+          ]
+        },
+        "DGA-P": {
+          "n_dga": 6489,
+          "n_benign": 22800,
+          "accuracy": 0.9712178633616716,
+          "precision": 0.9112762237762237,
+          "recall": 0.9639389736477115,
+          "f1": 0.9368681195237025,
+          "confusion_matrix": [
+            [
+              22191,
+              609
+            ],
+            [
+              234,
+              6255
+            ]
+          ]
+        },
+        "DGA-W": {
+          "n_dga": 4519,
+          "n_benign": 22800,
+          "accuracy": 0.9704235147699404,
+          "precision": 0.8764455264759586,
+          "recall": 0.9559637087851295,
+          "f1": 0.9144792548687553,
+          "confusion_matrix": [
+            [
+              22191,
+              609
+            ],
+            [
+              199,
+              4320
+            ]
+          ]
+        }
+      }
+    },
+    "handcraft": {
+      "f1": 0.9135579848980052,
+      "accuracy": 0.9158991228070176,
+      "auc": 0.9755899892274547,
+      "per_family": {
+        "DGA-R": {
+          "n_dga": 11792,
+          "n_benign": 22800,
+          "accuracy": 0.9527925531914894,
+          "precision": 0.8981111372364605,
+          "recall": 0.9717605156037992,
+          "f1": 0.9334853977434727,
+          "confusion_matrix": [
+            [
+              21500,
+              1300
+            ],
+            [
+              333,
+              11459
+            ]
+          ]
+        },
+        "DGA-P": {
+          "n_dga": 6489,
+          "n_benign": 22800,
+          "accuracy": 0.9191505343302947,
+          "precision": 0.8065764023210832,
+          "recall": 0.83541377716135,
+          "f1": 0.8207418622255866,
+          "confusion_matrix": [
+            [
+              21500,
+              1300
+            ],
+            [
+              1068,
+              5421
+            ]
+          ]
+        },
+        "DGA-W": {
+          "n_dga": 4519,
+          "n_benign": 22800,
+          "accuracy": 0.9109044987005381,
+          "precision": 0.7225186766275347,
+          "recall": 0.7490595264439035,
+          "f1": 0.7355497609734898,
+          "confusion_matrix": [
+            [
+              21500,
+              1300
+            ],
+            [
+              1134,
+              3385
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "dga_type_distribution": {
+    "DGA-P": 6489,
+    "benign": 22800,
+    "DGA-R": 11792,
+    "DGA-W": 4519
+  },
+  "model_size": {
+    "bilstm_weights_MB": 2.792721748352051,
+    "string_head_MB": 0.16064929962158203,
+    "distilbert_weights_MB": 253.1928358078003,
+    "xgb_handcraft_MB": 0.7021207809448242,
+    "scaler_MB": 0.0010442733764648438,
+    "total_pipeline_MB": 256.8493719100952
+  },
+  "training_cost": {
+    "string_head_seconds": 4.76168417930603,
+    "string_head_energy_J": 285.7010507583618,
+    "xgb_seconds": 1.3104522228240967,
+    "xgb_energy_J": 235.7200731310928,
+    "bilstm_extract_seconds": 5.48356819152832,
+    "note": "Không train lại BiLSTM/DistilBERT (reuse từ selectAlgorithm.py)."
+  },
+  "data": {
+    "data_dir": "DataNew",
+    "splits": {
+      "train": "train.csv",
+      "val": "val.csv",
+      "test": "test.csv"
+    },
+    "total_samples": 304000,
+    "n_train": 212800,
+    "n_val": 45600,
+    "n_test": 45600,
+    "n_positive_total": 152000,
+    "n_negative_total": 152000
+  },
+  "config": {
+    "string_head_hidden": 128,
+    "string_head_epochs": 8,
+    "string_head_lr": 0.001,
+    "string_head_dropout": 0.3,
+    "xgb_n_estimators": 500,
+    "xgb_max_depth": 6,
+    "xgb_lr": 0.1,
+    "xgb_best_iteration": 487,
+    "grid_step_coarse": 0.1,
+    "grid_step_refine": 0.05,
+    "seed": 42
+  },
+  "environment": {
+    "python": "3.10.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "cuda": true,
+    "torch": "2.9.0+cu128",
+    "xgboost": "3.2.0"
+  }
+}

@@ -1,0 +1,16 @@
+====== M1 — F1 theo loại DGA ======
+Model        : out_M1\model.joblib
+Test samples : 45,600
+
+Phân bố loại DGA (heuristic):
+  DGA-R    :   11,792  (25.86%)
+  DGA-P    :    6,489  (14.23%)
+  DGA-W    :    4,519  ( 9.91%)
+  benign   :   22,800  (50.00%)
+
+Toàn test: Accuracy = 93.43%   F1 = 93.24%
+
+Loại        n_dga      Acc     Prec   Recall       F1
+DGA-R      11,792   96.53   93.21   96.88   95.01
+DGA-P       6,489   93.99   86.99   85.70   86.34
+DGA-W       4,519   93.78   81.45   80.84   81.14

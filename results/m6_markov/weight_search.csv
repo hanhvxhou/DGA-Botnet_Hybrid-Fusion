@@ -1,0 +1,2 @@
+metric;weights;threshold;val_f1;test_f1;test_acc;test_auc
+f1;"{""string"": 0.1, ""semantic"": 0.1, ""handcraft"": 0.0}";0.5000000000000002;0.9787018701870187;0.9773387309689343;0.9774122807017543;0.9967450542474608

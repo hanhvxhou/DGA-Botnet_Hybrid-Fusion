@@ -1,0 +1,16 @@
+====== M6-v3 — F1 theo loại DGA (Late Fusion) ======
+Pipeline    : Late Fusion - BiLSTM-MLP + DistilBERT + Handcraft-XGB
+Test samples: 45,600
+
+Phân bố loại DGA (heuristic):
+  DGA-R   :   11,792  (25.86%)
+  DGA-P   :    6,489  (14.23%)
+  DGA-W   :    4,519  ( 9.91%)
+  benign  :   22,800  (50.00%)
+
+Toàn test: Accuracy=97.74%  F1=97.73%  AUC=0.9967
+
+Loại        n_dga      Acc     Prec   Recall       F1
+DGA-R      11,792   98.25   96.35   98.62   97.47
+DGA-P       6,489   97.74   93.43   96.61   94.99
+DGA-W       4,519   97.63   90.72   95.44   93.02

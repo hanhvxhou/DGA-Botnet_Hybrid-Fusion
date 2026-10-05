@@ -1,0 +1,74 @@
+{
+  "model": "M1 — RF + n-gram + PCA",
+  "dga_type_distribution": {
+    "DGA-P": 6489,
+    "benign": 22800,
+    "DGA-R": 11792,
+    "DGA-W": 4519
+  },
+  "overall": {
+    "accuracy": 0.9343421052631579,
+    "f1": 0.9323695504856562
+  },
+  "per_family": {
+    "DGA-R": {
+      "n_dga": 11792,
+      "n_benign": 22800,
+      "accuracy": 0.9653098982423681,
+      "precision": 0.9321148825065274,
+      "recall": 0.9687924016282226,
+      "f1": 0.9500998003992016,
+      "confusion_matrix": [
+        [
+          21968,
+          832
+        ],
+        [
+          368,
+          11424
+        ]
+      ]
+    },
+    "DGA-P": {
+      "n_dga": 6489,
+      "n_benign": 22800,
+      "accuracy": 0.9399091809211649,
+      "precision": 0.8698576568121382,
+      "recall": 0.8569887501926337,
+      "f1": 0.8633752522900171,
+      "confusion_matrix": [
+        [
+          21968,
+          832
+        ],
+        [
+          928,
+          5561
+        ]
+      ]
+    },
+    "DGA-W": {
+      "n_dga": 4519,
+      "n_benign": 22800,
+      "accuracy": 0.9378454555437608,
+      "precision": 0.8144927536231884,
+      "recall": 0.8083646824518699,
+      "f1": 0.8114171479342515,
+      "confusion_matrix": [
+        [
+          21968,
+          832
+        ],
+        [
+          866,
+          3653
+        ]
+      ]
+    }
+  },
+  "heuristic_thresholds": {
+    "DGA-W": "length >= 12 AND vowel_ratio >= 0.30 AND entropy <= 3.6",
+    "DGA-R": "entropy >= 3.8 OR digit_ratio >= 0.15",
+    "DGA-P": "0.20 <= vowel_ratio <= 0.45 AND entropy < 3.8"
+  }
+}

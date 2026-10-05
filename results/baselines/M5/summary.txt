@@ -1,0 +1,49 @@
+================ M5 — Dual-Embedding Transformer (Char + Bigram) ================
+Data dir: DataNew/ (train.csv, val.csv, test.csv)
+Tổng mẫu           : 304,000  (DGA=152,000, benign=152,000)
+Chia                : Train=212,800 | Val=45,600 | Test=45,600
+
+[Kiến trúc]
+  Char vocab       : 40  |  Bigram vocab: 1447
+  d_model          : 256
+  Số heads         : 8
+  Số layers        : 6  (mỗi luồng)
+  FFN dim          : 1024
+  FC hidden        : 256
+  Tham số          : 9,989,634
+  Device           : cuda
+
+[Hiệu năng — Test]
+  Accuracy         : 95.66%
+  Precision        : 95.85%
+  Recall           : 95.44%
+  F1-score         : 95.65%
+  AUC-ROC          : 0.9916
+
+[Chi phí huấn luyện]
+  Wall time        : 1925.93 s  (32.10 phút)
+  CPU utilization  : 3.8%
+  Avg power        : 60.0 W
+  Energy           : 115555.78 J  (32.0988 Wh)
+  Đo bằng          : estimated_from_utilization
+  Best epoch       : 21  (val F1=95.88%)
+
+[Chi phí suy diễn / mẫu]
+  Wall             : 0.0916 ms/mẫu
+  Energy           : 5.4965 mJ/mẫu
+  Avg power        : 60.0 W
+  Đo bằng          : estimated_from_utilization
+
+[Kích thước mô hình]
+  File tổng        : 38.28 MB  (9,989,634 tham số)
+
+[Bảng 5 — F1 theo loại DGA]
+  Loại        n_dga   F1 (%)     Prec   Recall
+  DGA-R      11,792   95.08   92.46   97.85
+  DGA-P       6,489   90.12   86.62   93.91
+  DGA-W       4,519   86.11   81.44   91.35
+
+[Môi trường]
+  Python           : 3.10.9
+  PyTorch          : 2.9.0+cu128
+  CUDA available   : True

@@ -1,0 +1,54 @@
+======== M6-v3 — Late Fusion Hybrid (Soft Voting) ========
+Pipeline      : 3 branch independent classifiers + soft voting
+  Branch 1 (String)    : BiLSTM emb (256d) → MLP head
+  Branch 2 (Semantic)  : DistilBERT (768d) → fine-tuned classifier
+  Branch 3 (Handcraft) : 20 features → XGBoost
+Data dir: DataNew/ (train.csv, val.csv, test.csv)
+Tổng mẫu      : 304,000  (DGA=152,000, benign=152,000)
+Chia          : Train=212,800 | Val=45,600 | Test=45,600
+
+[Branch test F1 @0.5 — riêng từng nhánh]
+  Branch 1 (String)    : 96.52%
+  Branch 2 (Semantic)  : 97.33%
+  Branch 3 (Handcraft) : 91.36%
+
+[Soft Voting (best weights from VAL grid search)]
+  Weights (string, semantic, handcraft) = (0.100, 0.100, 0.000)
+  Threshold     : 0.5000
+  Val F1        : 97.87%
+
+[Hiệu năng — TEST (M6-v3 Final)]
+  Accuracy    : 97.74%
+  Precision   : 98.05%
+  Recall      : 97.42%
+  F1-score    : 97.73%
+  AUC-ROC     : 0.9967
+
+[Bảng — F1 theo loại DGA]
+  Loại        n_dga   F1 (%)     Prec   Recall
+  DGA-R      11,792   97.47   96.35   98.62
+  DGA-P       6,489   94.99   93.43   96.61
+  DGA-W       4,519   93.02   90.72   95.44
+
+[Chi phí huấn luyện]
+  String head (MLP)   : 4.8s, 285.7J
+  Handcraft XGBoost   : 1.3s, 235.7J  (best_iter=487)
+  BiLSTM extract emb  : 5.5s
+  (BiLSTM/DistilBERT model weights tái sử dụng từ selectAlgorithm.py)
+
+[Kích thước pipeline]
+  BiLSTM weights      : 2.79 MB  (out_select/bilstm)
+  String head (MLP)   : 0.16 MB
+  DistilBERT weights  : 253.19 MB  (out_select/distilbert)
+  Handcraft XGBoost   : 0.70 MB
+  Scaler              : 0.00 MB
+  Tổng                : 256.85 MB
+
+[So sánh với M6 Ver1 (Early Fusion)]
+  M6 Ver1 (concat → XGBoost) : F1=96,37%  DGA-W=88,98%
+  M6-v3 (Late Fusion)        : F1=97.73%  DGA-W=93.02%
+
+[Môi trường]
+  Python      : 3.10.9
+  PyTorch     : 2.9.0+cu128
+  CUDA        : True

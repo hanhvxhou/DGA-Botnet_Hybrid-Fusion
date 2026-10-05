@@ -1,0 +1,16 @@
+====== M5 — F1 theo loại DGA ======
+Test samples : 45,600
+Device       : cuda
+
+Phân bố loại DGA (heuristic):
+  DGA-R    :   11,792  (25.86%)
+  DGA-P    :    6,489  (14.23%)
+  DGA-W    :    4,519  ( 9.91%)
+  benign   :   22,800  (50.00%)
+
+Toàn test: Accuracy = 95.66%   F1 = 95.65%
+
+Loại        n_dga      Acc     Prec   Recall       F1
+DGA-R      11,792   96.55   92.46   97.85   95.08
+DGA-P       6,489   95.44   86.62   93.91   90.12
+DGA-W       4,519   95.12   81.44   91.35   86.11

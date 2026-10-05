@@ -1,0 +1,174 @@
+{
+  "validation": {
+    "accuracy": 0.933969298245614,
+    "precision": 0.9595040170900478,
+    "recall": 0.9061842105263158,
+    "f1": 0.9320821961067376,
+    "auc": 0.9809671764389043,
+    "confusion_matrix": [
+      [
+        21928,
+        872
+      ],
+      [
+        2139,
+        20661
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.9343421052631579,
+    "precision": 0.9612482533768049,
+    "recall": 0.9051754385964912,
+    "f1": 0.9323695504856562,
+    "auc": 0.9812383242920899,
+    "confusion_matrix": [
+      [
+        21968,
+        832
+      ],
+      [
+        2162,
+        20638
+      ]
+    ]
+  },
+  "per_family": {
+    "DGA-R": {
+      "n_dga": 11792,
+      "n_benign": 22800,
+      "accuracy": 0.9653098982423681,
+      "precision": 0.9321148825065274,
+      "recall": 0.9687924016282226,
+      "f1": 0.9500998003992016,
+      "confusion_matrix": [
+        [
+          21968,
+          832
+        ],
+        [
+          368,
+          11424
+        ]
+      ]
+    },
+    "DGA-P": {
+      "n_dga": 6489,
+      "n_benign": 22800,
+      "accuracy": 0.9399091809211649,
+      "precision": 0.8698576568121382,
+      "recall": 0.8569887501926337,
+      "f1": 0.8633752522900171,
+      "confusion_matrix": [
+        [
+          21968,
+          832
+        ],
+        [
+          928,
+          5561
+        ]
+      ]
+    },
+    "DGA-W": {
+      "n_dga": 4519,
+      "n_benign": 22800,
+      "accuracy": 0.9378454555437608,
+      "precision": 0.8144927536231884,
+      "recall": 0.8083646824518699,
+      "f1": 0.8114171479342515,
+      "confusion_matrix": [
+        [
+          21968,
+          832
+        ],
+        [
+          866,
+          3653
+        ]
+      ]
+    }
+  },
+  "dga_type_distribution": {
+    "DGA-P": 6489,
+    "benign": 22800,
+    "DGA-R": 11792,
+    "DGA-W": 4519
+  },
+  "model_size": {
+    "compressed_MB": 67.56056880950928,
+    "components_MB": {
+      "vectorizer_MB": 0.1569671630859375,
+      "svd_MB": 1.9092016220092773,
+      "scaler_MB": 0.0009984970092773438,
+      "rf_MB": 298.5261468887329
+    }
+  },
+  "training_cost": {
+    "wall_seconds": 18.412888050079346,
+    "cpu_seconds": 403.0625,
+    "cpu_utilization": 0.9120932461901848,
+    "avg_power_watts": 187.04532049118512,
+    "energy_joules": 3444.044546495404,
+    "energy_Wh": 0.9566790406931678,
+    "energy_method": "estimated_from_utilization"
+  },
+  "inference_cost": {
+    "n_repeats": 3,
+    "n_samples": 45600,
+    "avg_wall_seconds": 0.08713634808858235,
+    "avg_cpu_seconds": 1.28125,
+    "avg_energy_joules": 12.453448145013105,
+    "avg_power_watts": 143.2428828262064,
+    "avg_cpu_utilization": 0.6148624191778292,
+    "energy_per_sample_mJ": 0.27310193300467334,
+    "wall_per_sample_ms": 0.001910884826503999,
+    "method": "estimated_from_utilization"
+  },
+  "feature_extraction_seconds": 10.400665998458862,
+  "data": {
+    "data_dir": "DataNew",
+    "splits": {
+      "train": "train.csv",
+      "val": "val.csv",
+      "test": "test.csv"
+    },
+    "total_samples": 304000,
+    "n_train": 212800,
+    "n_val": 45600,
+    "n_test": 45600,
+    "n_positive_total": 152000,
+    "n_negative_total": 152000
+  },
+  "config": {
+    "ngram_range": [
+      1,
+      3
+    ],
+    "max_ngram_features": 5000,
+    "pca_dim": 50,
+    "rf_n_estimators": 200,
+    "rf_max_depth": 25,
+    "rf_class_weight": "balanced",
+    "seed": 42
+  },
+  "heuristic_thresholds": {
+    "DGA-W": "length >= 12 AND vowel_ratio >= 0.30 AND entropy <= 3.6",
+    "DGA-R": "entropy >= 3.8 OR digit_ratio >= 0.15",
+    "DGA-P": "0.20 <= vowel_ratio <= 0.45 AND entropy < 3.8"
+  },
+  "cpu_profile": {
+    "model": "Intel 24-core (Xeon W / Core Ultra class)",
+    "base_power_W": 125.0,
+    "max_turbo_power_W": 280.0,
+    "avg_multithread_W": 200.0,
+    "avg_light_load_W": 60.0,
+    "logical_cores": 24
+  },
+  "environment": {
+    "python": "3.10.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "cpu_count": 24
+  }
+}

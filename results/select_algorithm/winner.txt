@@ -1,0 +1,4 @@
+winner_key=bert
+model=Bert (bert-base-uncased)
+test_f1=97.45
+metric_selection=f1

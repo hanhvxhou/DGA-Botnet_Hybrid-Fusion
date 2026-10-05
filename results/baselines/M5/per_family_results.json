@@ -1,0 +1,74 @@
+{
+  "model": "M5 — Dual-Embedding Transformer",
+  "dga_type_distribution": {
+    "DGA-P": 6489,
+    "benign": 22800,
+    "DGA-R": 11792,
+    "DGA-W": 4519
+  },
+  "overall": {
+    "accuracy": 0.9565570175438597,
+    "f1": 0.956462495329773
+  },
+  "per_family": {
+    "DGA-R": {
+      "n_dga": 11792,
+      "n_benign": 22800,
+      "accuracy": 0.965454440333025,
+      "precision": 0.9245933167721773,
+      "recall": 0.9784599728629579,
+      "f1": 0.9507642865971736,
+      "confusion_matrix": [
+        [
+          21859,
+          941
+        ],
+        [
+          254,
+          11538
+        ]
+      ]
+    },
+    "DGA-P": {
+      "n_dga": 6489,
+      "n_benign": 22800,
+      "accuracy": 0.9543856055174298,
+      "precision": 0.8662402274342573,
+      "recall": 0.9391277546617353,
+      "f1": 0.9012126589766342,
+      "confusion_matrix": [
+        [
+          21859,
+          941
+        ],
+        [
+          395,
+          6094
+        ]
+      ]
+    },
+    "DGA-W": {
+      "n_dga": 4519,
+      "n_benign": 22800,
+      "accuracy": 0.9512427248435155,
+      "precision": 0.814361807062537,
+      "recall": 0.9134764328391237,
+      "f1": 0.8610763454317898,
+      "confusion_matrix": [
+        [
+          21859,
+          941
+        ],
+        [
+          391,
+          4128
+        ]
+      ]
+    }
+  },
+  "heuristic_thresholds": {
+    "DGA-W": "length >= 12 AND vowel_ratio >= 0.30 AND entropy <= 3.6",
+    "DGA-R": "entropy >= 3.8 OR digit_ratio >= 0.15",
+    "DGA-P": "0.20 <= vowel_ratio <= 0.45 AND entropy < 3.8"
+  }
+}

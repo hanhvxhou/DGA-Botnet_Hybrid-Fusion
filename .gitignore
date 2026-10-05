@@ -372,3 +372,7 @@ TongAnhTuan.py
 .idea/
 
 !**/.gitkeep
+
+# Exception: allow reference results folder
+!results/
+!results/**

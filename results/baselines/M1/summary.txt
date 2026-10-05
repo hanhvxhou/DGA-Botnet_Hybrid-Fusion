@@ -1,0 +1,47 @@
+================ M1 — Random Forest + n-gram + PCA ================
+Data dir: DataNew/ (train.csv, val.csv, test.csv)
+Tổng mẫu           : 304,000  (DGA=152,000, benign=152,000)
+Chia                : Train=212,800 | Val=45,600 | Test=45,600
+
+[CPU profile]
+  Model            : Intel 24-core (Xeon W / Core Ultra class)
+  Logical cores    : 24
+
+[Hiệu năng — Test]
+  Accuracy         : 93.43%
+  Precision        : 96.12%
+  Recall           : 90.52%
+  F1-score         : 93.24%
+  AUC-ROC          : 0.9812
+
+[Chi phí huấn luyện]
+  Wall time        : 18.41 s  (0.31 phút)
+  CPU time         : 403.06 s
+  CPU utilization  : 91.2%
+  Avg power        : 187.0 W
+  Energy           : 3444.04 J  (0.9567 Wh)
+  Đo bằng          : estimated_from_utilization
+
+[Chi phí suy diễn / mẫu]
+  Wall             : 0.0019 ms/mẫu
+  Energy           : 0.2731 mJ/mẫu
+  Avg power        : 143.2 W
+  Đo bằng          : estimated_from_utilization
+
+[Kích thước mô hình]
+  File tổng (nén)  : 67.56 MB
+  vectorizer_MB    : 0.16 MB (chưa nén)
+  svd_MB           : 1.91 MB (chưa nén)
+  scaler_MB        : 0.00 MB (chưa nén)
+  rf_MB            : 298.53 MB (chưa nén)
+
+[Bảng 5 — F1 theo loại DGA]
+  Loại        n_dga   F1 (%)     Prec   Recall
+  DGA-R      11,792   95.01   93.21   96.88
+  DGA-P       6,489   86.34   86.99   85.70
+  DGA-W       4,519   81.14   81.45   80.84
+
+[Môi trường]
+  Python           : 3.10.9
+  Platform         : Windows-10-10.0.26200-SP0
+  CPU count        : 24

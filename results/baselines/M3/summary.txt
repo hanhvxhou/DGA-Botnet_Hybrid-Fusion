@@ -1,0 +1,48 @@
+================ M3 — RCNN-SPP (CNN + BiLSTM + SPP) ================
+Data dir: DataNew/ (train.csv, val.csv, test.csv)
+Tổng mẫu           : 304,000  (DGA=152,000, benign=152,000)
+Chia                : Train=212,800 | Val=45,600 | Test=45,600
+
+[Kiến trúc]
+  Char embedding   : 128-d
+  BiLSTM           : 128 đơn vị (2 chiều → 256)
+  CNN kernels      : [3, 5, 7], out_channels=128
+  SPP bins         : [1, 2, 4]
+  FC hidden        : 256
+  Tham số          : 1,449,986
+  Device           : cuda
+
+[Hiệu năng — Test]
+  Accuracy         : 96.50%
+  Precision        : 96.70%
+  Recall           : 96.29%
+  F1-score         : 96.49%
+  AUC-ROC          : 0.9940
+
+[Chi phí huấn luyện]
+  Wall time        : 93.27 s  (1.55 phút)
+  CPU utilization  : 3.6%
+  Avg power        : 60.0 W
+  Energy           : 5596.15 J  (1.5545 Wh)
+  Đo bằng          : estimated_from_utilization
+  Best epoch       : 7  (val F1=96.45%)
+
+[Chi phí suy diễn / mẫu]
+  Wall             : 0.0105 ms/mẫu
+  Energy           : 0.6278 mJ/mẫu
+  Avg power        : 60.0 W
+  Đo bằng          : estimated_from_utilization
+
+[Kích thước mô hình]
+  File tổng        : 5.54 MB  (1,449,986 tham số)
+
+[Bảng 5 — F1 theo loại DGA]
+  Loại        n_dga   F1 (%)     Prec   Recall
+  DGA-R      11,792   95.94   93.91   98.06
+  DGA-P       6,489   91.87   89.13   94.79
+  DGA-W       4,519   89.19   84.97   93.85
+
+[Môi trường]
+  Python           : 3.10.9
+  PyTorch          : 2.9.0+cu128
+  CUDA available   : True
