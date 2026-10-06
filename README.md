@@ -313,4 +313,12 @@ Faculty of Information Technology, Hanoi Open University
 Email: hanhvx@hou.edu.vn
 GitHub: [@hanhvxhou](https://github.com/hanhvxhou)
 
+**Dr. Xuan Dau Hoang**
+Email: dauhx@ptit.edu.vn
+Posts and Telecommunications Institute of Technology (PTIT), Vietnam
+
+**Ninh Thi Thu Trang**
+Email: trangntt2@ptit.edu.vn
+Posts and Telecommunications Institute of Technology (PTIT), Vietnam
+
 For code-related issues, please open an [issue](https://github.com/hanhvxhou/DGA-Botnet_Hybrid-Fusion/issues) on this repository.
