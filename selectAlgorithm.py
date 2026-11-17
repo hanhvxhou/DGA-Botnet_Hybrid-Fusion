@@ -80,8 +80,12 @@ TEST_CSV    = "test.csv"
 CSV_SEP     = ";"
 DOMAIN_COL  = "domain"
 LABEL_COL   = "label"
-ROOT_OUT    = Path("out_select")
-SEED        = 42
+SEED        = int(os.environ.get("DGA_SEED", 42))
+# seed 42 giữ thư mục gốc out_select/; seed khác ghi vào out_select_seed<N>/
+ROOT_OUT    = Path(os.environ.get("DGA_SELECT_ROOT",
+                                  "out_select" if SEED == 42 else f"out_select_seed{SEED}"))
+# Chỉ chạy một số candidate (vd "bilstm,distilbert,bert"); rỗng = chạy cả 5
+CANDIDATES  = [c.strip() for c in os.environ.get("DGA_CANDIDATES", "").split(",") if c.strip()]
 # Encode ký tự (giống M3/M4)
 CHAR_VOCAB = ['<pad>'] + list("abcdefghijklmnopqrstuvwxyz0123456789-.")
 CHAR_TO_ID = {c: i for i, c in enumerate(CHAR_VOCAB)}
@@ -1024,11 +1028,18 @@ def main():
     results = {}
 
     # -- 3. CHẠY 5 CANDIDATE --
-    results["cnn"],        _, _, _ = run_cnn(X_train, X_val, X_test, y_train, y_val, y_test,
+    def _want(k):
+        return (not CANDIDATES) or (k in CANDIDATES)
+    print(f"[Seed] SEED={SEED}  ROOT_OUT={ROOT_OUT}  CANDIDATES={CANDIDATES or 'all'}")
+    if _want("cnn"):
+        results["cnn"],    _, _, _ = run_cnn(X_train, X_val, X_test, y_train, y_val, y_test,
                                               dga_types, data_info)
-    results["bilstm"],     _, _, _ = run_bilstm(X_train, X_val, X_test, y_train, y_val, y_test,
+    if _want("bilstm"):
+        results["bilstm"], _, _, _ = run_bilstm(X_train, X_val, X_test, y_train, y_val, y_test,
                                                  dga_types, data_info)
     for idx, (key, model_name) in enumerate(BERT_MODELS.items(), start=3):
+        if not _want(key):
+            continue
         res = run_bert(key, model_name, X_train, X_val, X_test, y_train, y_val, y_test,
                         dga_types, data_info, idx=idx, total=5)
         if res is not None and res[0] is not None:

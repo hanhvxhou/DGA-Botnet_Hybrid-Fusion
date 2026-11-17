@@ -109,13 +109,11 @@ TEST_CSV    = "test.csv"
 CSV_SEP     = ";"
 DOMAIN_COL  = "domain"
 LABEL_COL   = "label"
-#OUTPUT_DIR  = Path("out_M6_v3_Markov")
-#SEED        = 42
-SEED = int(os.environ.get("DGA_SEED", 42))
-OUTPUT_DIR = Path(os.environ.get("DGA_OUTPUT_DIR", f"out_M6_v3_Markov_seed{SEED}"))
-
-# Nguồn pretrained models
-SELECT_ROOT      = Path("out_select")
+SEED        = int(os.environ.get("DGA_SEED", 42))
+OUTPUT_DIR  = Path(os.environ.get("DGA_OUTPUT_DIR", f"out_M6_v3_Markov_seed{SEED}"))
+# Nguồn pretrained models: backbone BiLSTM/DistilBERT huấn luyện với CÙNG seed
+SELECT_ROOT      = Path(os.environ.get("DGA_SELECT_ROOT",
+                                       "out_select" if SEED == 42 else f"out_select_seed{SEED}"))
 BILSTM_DIR       = SELECT_ROOT / "bilstm"
 DISTILBERT_DIR   = SELECT_ROOT / "distilbert"
 
@@ -1386,9 +1384,9 @@ def main():
         "  (BiLSTM/DistilBERT model weights tái sử dụng từ selectAlgorithm.py)",
         "",
         "[Kích thước pipeline]",
-        f"  BiLSTM weights      : {bilstm_mb:.2f} MB  (out_select/bilstm)",
+        f"  BiLSTM weights      : {bilstm_mb:.2f} MB  ({BILSTM_DIR})",
         f"  String head (MLP)   : {str_head_mb:.2f} MB",
-        f"  DistilBERT weights  : {dbert_mb:.2f} MB  (out_select/distilbert)",
+        f"  DistilBERT weights  : {dbert_mb:.2f} MB  ({DISTILBERT_DIR})",
         f"  Handcraft XGBoost   : {xgb_mb:.2f} MB",
         f"  Scaler              : {scaler_mb:.2f} MB",
         f"  Tổng                : {total_mb:.2f} MB",
