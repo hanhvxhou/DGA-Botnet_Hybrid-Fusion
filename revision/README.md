@@ -11,7 +11,7 @@ This folder holds everything needed to reproduce the tables that were added or c
 | `labels/` | Family and subtype labels, the external sample and the alias mapping (see below). |
 | `perturbed/` | Test set with every suffix replaced by `.com` (`test_tldcom.csv`), with the suffix removed (`test_notld.csv`) and with a `www.` prefix (`test_www.csv`). |
 | `results/` | Summary tables of all analyses, averaged over five seeds (see below). |
-| `predictions/` | `test_predictions_seed<N>.csv.gz`: test-set probabilities and validation-selected thresholds of every model for each seed. Confusion matrices can be computed from these files. |
+| `predictions/` | `test_predictions_seed<N>.csv`: test-set probabilities of every model for each seed (`p_M6` = 0.5·`p_string` + 0.5·`p_distilbert`); `thresholds.csv`: the validation-selected threshold of every model and seed. Confusion matrices can be computed from these files. |
 
 The scripts in `code/`:
 
