@@ -236,4 +236,4 @@ If you use these datasets, cite the original sources:
 
 ## Contact
 
-For dataset-related issues: hanhvx@hou.edu.vn or GitHub Issues.
+For dataset-related issues, please open an issue in the repository.

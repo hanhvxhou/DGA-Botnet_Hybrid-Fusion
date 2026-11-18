@@ -1,0 +1,130 @@
+{
+  "char_vocab_models": [
+    "<pad>",
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "-",
+    "."
+  ],
+  "unsupported_char_handling_models": "mapped to <pad> (id 0) by CHAR_TO_ID.get(c, PAD_ID)",
+  "markov_orig": {
+    "V": 40,
+    "bigram_states": 1305,
+    "trigram_states": 22953,
+    "unseen_logp": -3.6888794541139363,
+    "sum_P_next_frequent_contexts": [
+      {
+        "context": "e",
+        "sum_P_next_over_36_symbols": 0.8978452524619764
+      },
+      {
+        "context": "a",
+        "sum_P_next_over_36_symbols": 0.931942063599068
+      },
+      {
+        "context": "o",
+        "sum_P_next_over_36_symbols": 0.9079289404709256
+      },
+      {
+        "context": "i",
+        "sum_P_next_over_36_symbols": 0.9615015502731431
+      },
+      {
+        "context": "s",
+        "sum_P_next_over_36_symbols": 0.8067499794458602
+      },
+      {
+        "context": "r",
+        "sum_P_next_over_36_symbols": 0.9195188492063493
+      },
+      {
+        "context": "t",
+        "sum_P_next_over_36_symbols": 0.895895360601243
+      },
+      {
+        "context": "n",
+        "sum_P_next_over_36_symbols": 0.9157843224486163
+      },
+      {
+        "context": "l",
+        "sum_P_next_over_36_symbols": 0.92487161488159
+      },
+      {
+        "context": "c",
+        "sum_P_next_over_36_symbols": 0.9578968058968059
+      }
+    ]
+  },
+  "markov_eos": {
+    "alphabet": "abcdefghijklmnopqrstuvwxyz0123456789",
+    "V": 37,
+    "bos": "^",
+    "eos": "$",
+    "bigram_states": 1365,
+    "trigram_states": 25285,
+    "max_normalisation_error": 5.551115123125783e-16
+  },
+  "n_benign_train_for_markov": 106400,
+  "dictionary": {
+    "source": "nltk.corpus.words",
+    "nltk_version": "3.9.4",
+    "filter": "isalpha and 3<=len<=12, lower-cased",
+    "n_words": 196802
+  },
+  "feature_names": [
+    "len_full",
+    "len_main",
+    "entropy",
+    "vowel_ratio",
+    "consonant_ratio",
+    "digit_ratio",
+    "hex_ratio",
+    "special_ratio",
+    "unique_ratio",
+    "longest_vowel_run",
+    "longest_consonant_run",
+    "longest_digit_run",
+    "dot_count",
+    "tld_len",
+    "has_digit",
+    "tld_common",
+    "n_repeats",
+    "meaning_ratio",
+    "markov_bi_perplexity",
+    "markov_tri_perplexity"
+  ]
+}

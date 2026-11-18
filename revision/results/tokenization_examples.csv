@@ -1,0 +1,25 @@
+tokenizer;subtype;domain;pieces
+distilbert;benign;kocka.org;ko ##ck ##a . org
+distilbert;benign;planetcloudnine.com;planet ##cl ##oud ##nine . com
+distilbert;benign;veda.wikidot.com;ve ##da . wi ##ki ##dot . com
+distilbert;DGA-R;xrgdturydlsj.net;x ##rg ##dt ##ury ##dl ##s ##j . net
+distilbert;DGA-R;ab281f14443ce.com;ab ##28 ##1 ##f ##14 ##44 ##3 ##ce . com
+distilbert;DGA-R;eqrsprsspn.ws;e ##q ##rs ##pr ##ss ##p ##n . w ##s
+distilbert;DGA-P;wqxeuylgvioxbn.biz;w ##q ##x ##eu ##yl ##g ##vio ##x ##bn . bi ##z
+distilbert;DGA-P;mdcnugevjolnvs.click;md ##c ##nu ##ge ##v ##jo ##ln ##vs . click
+distilbert;DGA-P;huezbc.com;hue ##z ##bc . com
+distilbert;DGA-W;xxvdiuqbtng.mooo.com;xx ##vd ##iu ##q ##bt ##ng . mo ##oo . com
+distilbert;DGA-W;spacesperiodfalse.com;spaces ##per ##io ##df ##als ##e . com
+distilbert;DGA-W;jacquettafairbairn.net;ja ##c ##quet ##ta ##fa ##ir ##bai ##rn . net
+bert;benign;kocka.org;ko ##ck ##a . org
+bert;benign;planetcloudnine.com;planet ##cl ##oud ##nine . com
+bert;benign;veda.wikidot.com;ve ##da . wi ##ki ##dot . com
+bert;DGA-R;xrgdturydlsj.net;x ##rg ##dt ##ury ##dl ##s ##j . net
+bert;DGA-R;ab281f14443ce.com;ab ##28 ##1 ##f ##14 ##44 ##3 ##ce . com
+bert;DGA-R;eqrsprsspn.ws;e ##q ##rs ##pr ##ss ##p ##n . w ##s
+bert;DGA-P;wqxeuylgvioxbn.biz;w ##q ##x ##eu ##yl ##g ##vio ##x ##bn . bi ##z
+bert;DGA-P;mdcnugevjolnvs.click;md ##c ##nu ##ge ##v ##jo ##ln ##vs . click
+bert;DGA-P;huezbc.com;hue ##z ##bc . com
+bert;DGA-W;xxvdiuqbtng.mooo.com;xx ##vd ##iu ##q ##bt ##ng . mo ##oo . com
+bert;DGA-W;spacesperiodfalse.com;spaces ##per ##io ##df ##als ##e . com
+bert;DGA-W;jacquettafairbairn.net;ja ##c ##quet ##ta ##fa ##ir ##bai ##rn . net

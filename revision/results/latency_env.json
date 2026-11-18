@@ -1,0 +1,8 @@
+{
+  "torch": "2.9.0+cu128",
+  "cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 5070 Ti",
+  "cpu_threads": 24,
+  "python": "3.10.9",
+  "cpu": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel"
+}

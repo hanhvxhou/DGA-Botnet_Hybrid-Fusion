@@ -376,3 +376,18 @@ TongAnhTuan.py
 # Exception: allow reference results folder
 !results/
 !results/**
+
+# Multi-seed / revision outputs (large)
+out_M*_seed*/
+out_M6_v3_Markov_fullseed*/
+out_select_seed*/
+out_select_rand_seed*/
+rev_out/
+rev_upload.zip
+rev_p*.zip
+revision_log_*.txt
+multiseed_log_*.txt
+
+# Exception: revision material (manifests, labels, results, predictions)
+!revision/
+!revision/**

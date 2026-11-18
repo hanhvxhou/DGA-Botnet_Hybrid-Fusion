@@ -19,7 +19,7 @@ Step-by-step instructions to reproduce all results reported in the paper and `re
 
 ```bash
 # Clone
-git clone https://github.com/hanhvxhou/DGA-Botnet_Hybrid-Fusion.git
+git clone <repository-url>
 cd DGA-Botnet_Hybrid-Fusion
 
 # Virtual env
@@ -226,4 +226,4 @@ Final F1 metrics should be reproducible across GPUs within the tolerance above.
 ## 8. Contact
 
 For reproducibility issues not covered here, open an issue:
-https://github.com/hanhvxhou/DGA-Botnet_Hybrid-Fusion/issues
+the issue tracker of the repository

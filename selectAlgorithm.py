@@ -387,7 +387,15 @@ def load_bert_model_and_tokenizer(model_name):
     """Load model + tokenizer từ HuggingFace. Tự động phát hiện kiến trúc."""
     from transformers import AutoModel, AutoTokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    bert_model = AutoModel.from_pretrained(model_name)
+    if os.environ.get("DGA_BERT_RANDOM_INIT", "0") == "1":
+        # Ablation (IJICS revision, Reviewer 2): same architecture + same tokenizer,
+        # weights randomly initialised (no linguistic pretraining).
+        from transformers import AutoConfig
+        torch.manual_seed(SEED)
+        bert_model = AutoModel.from_config(AutoConfig.from_pretrained(model_name))
+        print(f"  [ABLATION] {model_name}: RANDOM INITIALISATION (no pretrained weights)")
+    else:
+        bert_model = AutoModel.from_pretrained(model_name)
     # Hidden size có thể khác nhau: DistilBERT 768, BERT 768, SecureBERT 768
     hidden_size = bert_model.config.hidden_size
     return bert_model, tokenizer, hidden_size
