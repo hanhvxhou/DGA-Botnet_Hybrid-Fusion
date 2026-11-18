@@ -36,8 +36,8 @@ The tables in `results/`:
 | `summary_table.csv`, `all_runs.csv` | All models and fusion variants, five seeds (Tables 1–4, 7, 8). |
 | `paired.csv` | Paired t-test, bootstrap, family-cluster bootstrap and McNemar test (Table 6). |
 | `calibration.csv`, `temperature_scaling.csv` | Calibration (Section 6.6). |
-| `disagreement.csv`, `per_family_errors.csv` | Branch disagreement and per-family error changes (Table 9). |
-| `external_v2_summary.csv`, `external_v2_runs.csv`, `external_M6_perfamily_seed42_novel.csv` | External detection rates (Table 5). |
+| `disagreement.csv`, `per_family_errors.csv`, `test_errors_per_family_by_seed.csv` | Branch disagreement and per-family error changes (Table 9); errors per family, model and seed. |
+| `external_v2_summary.csv`, `external_v2_runs.csv`, `external_per_family_all_models_seeds.csv`, `external_M6_perfamily_seed42_novel.csv` | External detection rates (Table 5); sample counts and detection rates for every family file, model and seed (exact overlaps removed). |
 | `benign_v2.csv` | Independent benign sets (Table 10). |
 | `robustness.csv` | Suffix and parsing perturbations (Table 11). |
 | `latency.csv`, `latency_env.json` | Measured cost (Table 12). |
