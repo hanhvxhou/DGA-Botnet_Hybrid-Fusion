@@ -1,132 +1,55 @@
-# Multi-seed tools cho IJICS revision
+# Thí nghiệm bổ sung cho bản sửa IJICS (DGA-HLF)
 
-Bộ công cụ chạy multi-seed experiments + aggregation để trả lời Reviewer 1, 2.
+Đã chạy thử toàn bộ quy trình trên một dự án giả lập (dữ liệu nhỏ, mô hình tí hon). Kết quả: không có lỗi. Xác suất tính lại khớp với các file `test_predictions.csv` đã lưu đến sai số 1e-8. Riêng bước đo trên GPU và đo năng lượng NVML chưa chạy thử được, vì máy thử không có GPU.
 
-## Thứ tự dùng
+## 1. Chép file vào thư mục dự án
 
-### Bước 1 — Patch M1-M6 (5 phút)
+Thư mục dự án là `D:\job\pycharm\DGABotnet2k25\DGA-HLF`. Chép ba file vào đó:
 
-Mở từng file sau trong PyCharm, tìm 2 dòng:
+| File | Ghi chú |
+|---|---|
+| `revision_experiments.py` | file mới |
+| `run_revision.ps1` | file mới |
+| `selectAlgorithm.py` | ghi đè bản hiện có |
 
-```python
-SEED        = 42
-OUTPUT_DIR  = Path("out_M<n>")
-```
+Bản `selectAlgorithm.py` mới vẫn tương thích ngược. Thay đổi duy nhất là cờ `DGA_BERT_RANDOM_INIT=1`, dùng cho thí nghiệm DistilBERT khởi tạo ngẫu nhiên: cùng kiến trúc, cùng tokenizer, cùng công thức huấn luyện, chỉ không dùng trọng số pretrained.
 
-Thay bằng:
+Script cần các file và thư mục sau, tất cả đã có sẵn trên máy:
 
-```python
-SEED        = int(os.environ.get("DGA_SEED", 42))
-OUTPUT_DIR  = Path(os.environ.get("DGA_OUTPUT_DIR", f"out_M<n>_seed{SEED}"))
-```
+- Mô hình và kết quả: `out_select/`, `out_select_seed43..46/`, `out_M6_v3_Markov_seed42/`, `out_M6_v3_Markov_fullseed43..46/`, `out_M1..5_seed42..46/`
+- Dữ liệu: `DataNew/` (gồm cả `DataNew/Test/`) và `test_external/`
 
-Files cần patch:
-- M1.py (OUTPUT_DIR = `Path("out_M1")`)
-- M2.py (OUTPUT_DIR = `Path("out_M2")`)
-- M3.py (OUTPUT_DIR = `Path("out_M3")`)
-- M4.py (OUTPUT_DIR = `Path("out_M4")`)
-- M5.py (OUTPUT_DIR = `Path("out_M5")`)
-- M6_v3_Markov.py (OUTPUT_DIR = `Path("out_M6_v3_Markov")`)
-
-Chi tiết trong `PATCH_INSTRUCTIONS.md`.
-
-### Bước 2 — Verify patch work (2 phút)
-
-```powershell
-$env:DGA_SEED = 42
-python M1.py
-# Kết quả nên vào folder: out_M1_seed42/
-# Và F1 ≈ 93.24% (giống kết quả cũ)
-```
-
-### Bước 3 — Chạy multi-seed (chạy qua đêm, ~5-10 giờ)
+## 2. Chạy (để qua đêm, khoảng 5–6 giờ)
 
 ```powershell
 cd D:\job\pycharm\DGABotnet2k25\DGA-HLF
-Copy-Item path\to\run_multiseed.ps1 .\
-.\run_multiseed.ps1
+.\run_revision.ps1
 ```
 
-Script sẽ:
-- Loop qua seeds 42-46
-- Mỗi seed xoá cache Markov cũ rồi chạy M1 → M2 → M3 → M4 → M5 → M6_v3_Markov
-- Output: `out_<MODEL>_seed<N>/`
-- Log file: `multiseed_log_<timestamp>.txt`
-- Skip nếu seed đã có `summary.txt` (resume-friendly)
+Script tự bỏ qua bước nào đã có kết quả. Nếu bị ngắt giữa chừng, chỉ cần chạy lại.
 
-### Bước 4 — Aggregate kết quả (2 phút)
+## 3. Gửi lại cho tôi
 
-```powershell
-Copy-Item path\to\aggregate_seeds.py .\
-python aggregate_seeds.py
-```
+- File `rev_upload.zip`, khoảng 50–150 MB. File này gồm `rev_out/`, các file metadata nhỏ, `DataNew/` và `test_external/`.
+- File log `revision_log_*.txt`
 
-Output: folder `aggregate_results/` chứa:
-- `table_binary_mean_std.csv` — Table 1 revised
-- `table_per_family_mean_std.csv` — Table 2 revised
-- `paired_ci_m6_vs_others.txt` — Bootstrap CI cho F1 differences
-- `aggregated_summary.md` — Paste vào response letter
+Nếu tải Tranco hoặc Umbrella thất bại, hãy tải thủ công và đặt cùng thư mục với tên `tranco_top-1m.csv.zip` và `umbrella_top-1m.csv.zip`:
 
-### Bước 5 — Disagreement analysis (1 phút)
+- Tranco: https://tranco-list.eu/top-1m.csv.zip
+- Umbrella: http://s3-us-west-1.amazonaws.com/umbrella-static/top-1m.csv.zip
 
-```powershell
-Copy-Item path\to\disagreement_analysis.py .\
-python disagreement_analysis.py
-```
+## Script làm gì (ứng với ý kiến reviewer)
 
-Output: 
-- `aggregate_results/disagreement_matrix.csv`
-- `aggregate_results/disagreement_by_subtype.csv`
-- `aggregate_results/disagreement_summary.md`
+| Bước | Nội dung | Trả lời ý kiến |
+|---|---|---|
+| prep | Tạo các tập đánh giá:<br>- test đổi đuôi .com, test bỏ đuôi, test thêm `www.`<br>- tập DGA ngoài, lấy mẫu giống hệt `Test_M6`<br>- 50k benign từ Tranco và 50k từ Cisco Umbrella (dạng tên miền đăng ký và FQDN), không trùng DataNew | R1: benign độc lập, FPR thấp, đuôi tên miền và cách phân tách |
+| prep | Đo mức trùng exact-domain giữa từng họ DGA ngoài và train/val/test | R1: overlap, họ unseen |
+| prep | Tính lại 20 đặc trưng thủ công theo hai cách:<br>- Markov gốc của M6<br>- Markov đã sửa: thêm BOS/EOS, V=37, tổng xác suất có điều kiện bằng 1, ký tự lạ bị loại | R2: phương trình 2–5, vocab, ký tự lạ |
+| prep | Bảng đặc trưng cho vài tên miền ví dụ; đặc tả từ điển NLTK | R2: worked examples, meaning_ratio |
+| prep | Thống kê tokenization theo subtype; kiểm tra DistilBERT và BERT có dùng chung vocab không | R2: tokenisation |
+| dump | Với mỗi seed 42–46: xác suất của M1–M5, BiLSTM, string head, DistilBERT, BERT, XGB handcraft (Markov gốc và Markov đã sửa) trên tất cả các tập | R1: ngưỡng chọn trên val cho mọi mô hình, calibration, CI theo cụm họ; R2: complementarity theo họ |
+| dump | Early fusion với cùng đầu vào: [BiLSTM emb + DistilBERT CLS] → MLP và → XGB; thêm biến thể có 20 đặc trưng | R1: early vs late fusion |
+| dump | DistilBERT khởi tạo ngẫu nhiên, 5 seed | R2: tách riêng đóng góp của pretraining |
+| latency | Độ trễ end-to-end tính từ chuỗi thô:<br>- batch 1/32/256<br>- p50/p95/p99, throughput<br>- có và không có nhánh XGB<br>- trên GPU và CPU<br>- năng lượng GPU đo bằng NVML | R1: chi phí tính toán, năng lượng |
 
-### Bước 6 — Upload kết quả cho tôi
-
-Zip folder `aggregate_results/` và upload. Tôi sẽ:
-- Merge số liệu vào bảng Table 1-5 revised
-- Tracked-changes bài IJICS
-- Hoàn thiện response letter
-
-## File list
-
-| File | Purpose |
-|------|---------|
-| `PATCH_INSTRUCTIONS.md` | Chi tiết cách patch M1-M6 |
-| `run_multiseed.ps1` | PowerShell script chạy 5 seeds |
-| `aggregate_seeds.py` | Gộp kết quả → mean/std + bootstrap CI |
-| `disagreement_analysis.py` | Phân tích BiLSTM vs DistilBERT fusion |
-| `README.md` | File này |
-
-## Troubleshooting
-
-### Markov cache issues
-
-Nếu M6_v3_Markov cho F1 lạ ở seed 43-46:
-- Check `benign_markov.npz` có bị xóa giữa các seeds không
-- Script đã có `Remove-Item benign_markov.npz` trước mỗi seed, nhưng verify
-
-### OOM (Out of Memory) ở M5
-
-M5 là model nặng nhất. Nếu OOM:
-- Giảm batch_size trong M5.py từ 256 → 128
-- Hoặc skip M5 với 1 số seeds (báo trong response: "M5 completed 3 seeds due to GPU constraints")
-
-### selectAlgorithm có cần retrain không?
-
-**KHÔNG**. selectAlgorithm chỉ dùng để chọn embedding backbone (DistilBERT), không claim statistical significance. Giữ nguyên kết quả seed 42 cũ.
-
-## Expected output example (sau aggregate)
-
-```
-table_binary_mean_std.csv:
-
-Model                        n_seeds  Acc (%)         Pre (%)         Rec (%)         F1 (%)          AUC-ROC
-M1 (RF + n-gram + PCA)       5        93.4X ± 0.XX    96.1X ± 0.XX    90.5X ± 0.XX    93.2X ± 0.XX    0.981X ± 0.0XXX
-M2 (TF-IDF + MLP)            5        95.9X ± 0.XX    ...
-M3 (RCNN-SPP)                5        96.5X ± 0.XX    ...
-M4 (ATT-CNN-BiLSTM)          5        96.1X ± 0.XX    ...
-M5 (Dual Transformer)        5        95.6X ± 0.XX    ...
-M6 Hybrid Late Fusion        5        97.7X ± 0.XX    98.0X ± 0.XX    97.4X ± 0.XX    97.7X ± 0.XX    0.9967 ± 0.00XX
-```
-
-Variance (± 0.XX) sẽ là small nếu training stable. Nếu variance lớn (> 1pp) 
-có thể signal overfitting hoặc data leakage — cần investigate.
+Các biến thể w_min (0.05–0.20) và các ensemble 3 nhánh sẽ do tôi tính lại offline từ xác suất validation. Kiểm tra trên bản giả lập cho thấy cách tính này tái tạo đúng bộ trọng số, ngưỡng và F1 mà M6 đã chọn. Vì vậy không cần chạy lại M6.
